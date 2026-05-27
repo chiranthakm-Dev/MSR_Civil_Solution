@@ -18,8 +18,8 @@ Future phases can extend the same codebase into the quote calculator, customer p
 - [x] Enable TypeScript strict mode
 - [ ] Install and configure TailwindCSS
 - [x] Add React Router
-- [ ] Add React Hook Form
-- [ ] Add Zod for validation
+- [x] Add React Hook Form
+- [x] Add Zod for validation
 - [ ] Add TanStack Query only when dynamic data is introduced
 - [ ] Add Zustand only if shared UI/application state becomes necessary
 - [x] Add ESLint
@@ -187,7 +187,7 @@ Future phases can extend the same codebase into the quote calculator, customer p
 - [ ] Keyboard accessible navigation
 - [ ] Visible focus states
 - [ ] Proper form labels
-- [ ] Inline form errors
+- [x] Inline form errors
 - [ ] Sufficient color contrast
 - [ ] Alt text for all meaningful images
 - [ ] ARIA labels for icon-only buttons
@@ -195,13 +195,13 @@ Future phases can extend the same codebase into the quote calculator, customer p
 
 ### Contact Form Security
 
-- [ ] Validate form inputs with Zod
-- [ ] Sanitize submitted text
-- [ ] Add spam protection
+- [x] Validate form inputs with Zod
+- [x] Sanitize submitted text
+- [x] Add spam protection
 - [ ] Add rate limiting through backend/form provider
-- [ ] Restrict attachment file types
-- [ ] Restrict attachment file size
-- [ ] Prevent secrets from being exposed in frontend
+- [x] Restrict attachment file types
+- [x] Restrict attachment file size
+- [x] Prevent secrets from being exposed in frontend
 - [ ] Add safe email sending flow
 - [ ] Store enquiries only in trusted backend/database if storage is required
 
@@ -600,7 +600,7 @@ Future phases can extend the same codebase into the quote calculator, customer p
 
 ### Application Security
 
-- [ ] Validate all forms with Zod
+- [x] Validate all forms with Zod
 - [ ] Sanitize all rich text content
 - [ ] Add rate limiting for auth and forms
 - [ ] Protect admin, customer, and employee routes
@@ -643,7 +643,7 @@ Future phases can extend the same codebase into the quote calculator, customer p
 - [ ] Calculator formulas
 - [ ] Timeline formulas
 - [ ] Material estimate formulas
-- [ ] Zod validation schemas
+- [x] Zod validation schemas
 - [ ] Formatting utilities
 
 ### Integration Tests

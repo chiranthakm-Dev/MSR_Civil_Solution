@@ -20,7 +20,8 @@ import {
   Wrench,
   X,
 } from 'lucide-react';
-import { type FormEvent, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import { useForm } from 'react-hook-form';
 import {
   BrowserRouter,
   Link,
@@ -30,6 +31,8 @@ import {
   useLocation,
   useParams,
 } from 'react-router-dom';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
 
 const navItems = [
   { label: 'Home', to: '/' },
@@ -188,6 +191,65 @@ const posts = [
       'Finish grade changes more than tiles and paint. It affects planning, procurement, labour, and timeline.',
   },
 ];
+
+const attachmentTypes = ['application/pdf', 'image/jpeg', 'image/png', 'image/webp'];
+const maxAttachmentBytes = 5 * 1024 * 1024;
+
+const contactSchema = z
+  .object({
+    name: z.string().trim().min(2, 'Enter your full name.').max(80, 'Name is too long.'),
+    email: z.string().trim().email('Enter a valid email address.'),
+    phone: z
+      .string()
+      .trim()
+      .regex(/^[+\d\s()-]{8,18}$/, 'Enter a valid phone number.'),
+    projectType: z.enum([
+      'Residential',
+      'Commercial',
+      'Structural Consultancy',
+      'Renovation',
+    ]),
+    message: z
+      .string()
+      .trim()
+      .min(20, 'Share at least 20 characters about your requirement.')
+      .max(1000, 'Message must stay under 1000 characters.'),
+    attachment: z.custom<FileList>().optional(),
+    company: z.string().optional(),
+  })
+  .superRefine((values, context) => {
+    if (values.company) {
+      context.addIssue({
+        code: 'custom',
+        message: 'Spam submission blocked.',
+        path: ['company'],
+      });
+    }
+
+    const file = values.attachment?.item(0);
+
+    if (!file) {
+      return;
+    }
+
+    if (!attachmentTypes.includes(file.type)) {
+      context.addIssue({
+        code: 'custom',
+        message: 'Upload a PDF, JPG, PNG, or WebP file.',
+        path: ['attachment'],
+      });
+    }
+
+    if (file.size > maxAttachmentBytes) {
+      context.addIssue({
+        code: 'custom',
+        message: 'Attachment must be 5 MB or smaller.',
+        path: ['attachment'],
+      });
+    }
+  });
+
+type ContactFormValues = z.infer<typeof contactSchema>;
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -857,10 +919,33 @@ function BlogDetailPage() {
 
 function ContactPage() {
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<ContactFormValues>({
+    resolver: zodResolver(contactSchema),
+    defaultValues: {
+      name: '',
+      email: '',
+      phone: '',
+      projectType: 'Residential',
+      message: '',
+      company: '',
+    },
+  });
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
+  function onSubmit() {
     setIsSubmitted(true);
+    reset({
+      name: '',
+      email: '',
+      phone: '',
+      projectType: 'Residential',
+      message: '',
+      company: '',
+    });
   }
 
   return (
@@ -872,22 +957,42 @@ function ContactPage() {
       />
       <section className="section section-dark" id="main-content">
         <div className="container contact-layout">
-          <form className="contact-form" onSubmit={handleSubmit}>
+          <form className="contact-form" noValidate onSubmit={handleSubmit(onSubmit)}>
             <label>
               Name
-              <input name="name" placeholder="Your name" required />
+              <input
+                aria-invalid={errors.name ? 'true' : 'false'}
+                autoComplete="name"
+                placeholder="Your name"
+                {...register('name')}
+              />
+              {errors.name ? <span className="field-error">{errors.name.message}</span> : null}
             </label>
             <label>
               Email
-              <input name="email" type="email" placeholder="you@example.com" required />
+              <input
+                aria-invalid={errors.email ? 'true' : 'false'}
+                autoComplete="email"
+                placeholder="you@example.com"
+                type="email"
+                {...register('email')}
+              />
+              {errors.email ? <span className="field-error">{errors.email.message}</span> : null}
             </label>
             <label>
               Phone
-              <input name="phone" type="tel" placeholder="+91" required />
+              <input
+                aria-invalid={errors.phone ? 'true' : 'false'}
+                autoComplete="tel"
+                placeholder="+91"
+                type="tel"
+                {...register('phone')}
+              />
+              {errors.phone ? <span className="field-error">{errors.phone.message}</span> : null}
             </label>
             <label>
               Project type
-              <select name="projectType" defaultValue="Residential">
+              <select {...register('projectType')}>
                 <option>Residential</option>
                 <option>Commercial</option>
                 <option>Structural Consultancy</option>
@@ -896,11 +1001,31 @@ function ContactPage() {
             </label>
             <label className="full-field">
               Message
-              <textarea name="message" placeholder="Tell us about site, area, location, and timeline" rows={5} />
+              <textarea
+                aria-invalid={errors.message ? 'true' : 'false'}
+                placeholder="Tell us about site, area, location, and timeline"
+                rows={5}
+                {...register('message')}
+              />
+              {errors.message ? <span className="field-error">{errors.message.message}</span> : null}
             </label>
             <label className="full-field">
               Attachment
-              <input name="attachment" type="file" accept=".pdf,.jpg,.jpeg,.png,.webp" />
+              <input
+                accept=".pdf,.jpg,.jpeg,.png,.webp"
+                aria-invalid={errors.attachment ? 'true' : 'false'}
+                type="file"
+                {...register('attachment')}
+              />
+              {errors.attachment ? (
+                <span className="field-error">{errors.attachment.message}</span>
+              ) : (
+                <span className="field-hint">Optional. PDF, JPG, PNG, or WebP up to 5 MB.</span>
+              )}
+            </label>
+            <label className="honeypot" aria-hidden="true">
+              Company
+              <input tabIndex={-1} autoComplete="off" {...register('company')} />
             </label>
             {isSubmitted ? (
               <p className="form-success full-field">

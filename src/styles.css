@@ -740,8 +740,36 @@ a {
   padding: 12px 14px;
 }
 
+.contact-form input[aria-invalid='true'],
+.contact-form textarea[aria-invalid='true'] {
+  border-color: #ef4444;
+}
+
 .contact-form textarea {
   resize: vertical;
+}
+
+.field-error,
+.field-hint {
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.45;
+}
+
+.field-error {
+  color: #fca5a5;
+}
+
+.field-hint {
+  color: var(--color-text-muted);
+}
+
+.honeypot {
+  height: 0;
+  left: -10000px;
+  overflow: hidden;
+  position: absolute;
+  width: 0;
 }
 
 .form-success {

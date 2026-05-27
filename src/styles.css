@@ -76,6 +76,18 @@ a {
   top: 16px;
 }
 
+.sr-only {
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}
+
 .container {
   margin: 0 auto;
   max-width: var(--container-max);
@@ -604,6 +616,17 @@ a {
   background: var(--color-accent-gold);
   border-color: var(--color-accent-gold);
   color: var(--color-text-on-gold);
+}
+
+.empty-state {
+  background: var(--color-bg-mid);
+  border: 1px solid var(--color-border);
+  border-left: 3px solid var(--color-accent-gold);
+  border-radius: 4px;
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+  margin: 0;
+  padding: 20px 24px;
 }
 
 .project-detail > img {

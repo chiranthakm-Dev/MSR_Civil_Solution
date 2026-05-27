@@ -67,7 +67,7 @@ Future phases can extend the same codebase into the quote calculator, customer p
 - [x] Smooth section/page navigation
 - [x] Responsive layout for mobile, tablet, and desktop
 - [x] 404 page
-- [ ] Basic loading and empty states where needed
+- [x] Basic loading and empty states where needed
 
 ### Home Page
 
@@ -111,7 +111,7 @@ Future phases can extend the same codebase into the quote calculator, customer p
 - [x] Project image cards
 - [x] Category filter UI
 - [ ] Year filter UI
-- [ ] Empty state for no matching projects
+- [x] Empty state for no matching projects
 
 ### Project Detail Page
 
@@ -179,19 +179,19 @@ Future phases can extend the same codebase into the quote calculator, customer p
 - [x] Add robots.txt
 - [x] Add structured data for local business
 - [x] Add structured data for blog articles
-- [ ] Use semantic headings
-- [ ] Make project and blog URLs clean and readable
+- [x] Use semantic headings
+- [x] Make project and blog URLs clean and readable
 
 ### Accessibility
 
-- [ ] Keyboard accessible navigation
-- [ ] Visible focus states
-- [ ] Proper form labels
+- [x] Keyboard accessible navigation
+- [x] Visible focus states
+- [x] Proper form labels
 - [x] Inline form errors
-- [ ] Sufficient color contrast
-- [ ] Alt text for all meaningful images
-- [ ] ARIA labels for icon-only buttons
-- [ ] Skip-to-content link
+- [x] Sufficient color contrast
+- [x] Alt text for all meaningful images
+- [x] ARIA labels for icon-only buttons
+- [x] Skip-to-content link
 
 ### Contact Form Security
 

@@ -608,6 +608,14 @@ function WhyChoose() {
 }
 
 function ProjectGrid({ filteredProjects = projects }: { filteredProjects?: typeof projects }) {
+  if (filteredProjects.length === 0) {
+    return (
+      <div className="container">
+        <p className="empty-state">No projects match this filter yet.</p>
+      </div>
+    );
+  }
+
   return (
     <div className="project-grid">
       {filteredProjects.map((project) => (
@@ -640,7 +648,7 @@ function ProjectsPreview() {
 
 function Testimonials() {
   return (
-    <section className="testimonials" aria-labelledby="testimonial-title">
+    <section className="testimonials" aria-label="Client testimonials">
       <div className="container">
         <SectionTitle
           eyebrow="Client testimonials"
@@ -793,6 +801,7 @@ function ProjectsPage() {
             {categories.map((item) => (
               <button
                 className={category === item ? 'active' : ''}
+                aria-pressed={category === item}
                 key={item}
                 type="button"
                 onClick={() => setCategory(item)}
@@ -859,6 +868,7 @@ function BlogPage() {
       <section className="section section-dark" id="main-content">
         <div className="container">
           <label className="search-box">
+            <span className="sr-only">Search articles</span>
             <Search size={18} />
             <input
               type="search"
@@ -867,16 +877,20 @@ function BlogPage() {
               onChange={(event) => setQuery(event.target.value)}
             />
           </label>
-          <div className="blog-grid">
-            {filteredPosts.map((post) => (
-              <Link className="blog-card" key={post.slug} to={`/blog/${post.slug}`}>
-                <p>{post.tag}</p>
-                <h2>{post.title}</h2>
-                <span>{post.date}</span>
-                <strong>{post.excerpt}</strong>
-              </Link>
-            ))}
-          </div>
+          {filteredPosts.length > 0 ? (
+            <div className="blog-grid">
+              {filteredPosts.map((post) => (
+                <Link className="blog-card" key={post.slug} to={`/blog/${post.slug}`}>
+                  <p>{post.tag}</p>
+                  <h2>{post.title}</h2>
+                  <span>{post.date}</span>
+                  <strong>{post.excerpt}</strong>
+                </Link>
+              ))}
+            </div>
+          ) : (
+            <p className="empty-state">No articles match your search yet.</p>
+          )}
         </div>
       </section>
     </>
@@ -1050,7 +1064,13 @@ function ContactPage() {
             <p>
               <Clock3 size={18} /> Mon to Sat, 9:30 AM to 6:30 PM
             </p>
-            <div className="map-placeholder">Google Maps embed area</div>
+            <div
+              className="map-placeholder"
+              role="img"
+              aria-label="Map placeholder for MSR Civil Solutions in Bengaluru"
+            >
+              Google Maps embed area
+            </div>
           </aside>
         </div>
       </section>
@@ -1090,10 +1110,20 @@ function Footer() {
             residential and commercial projects.
           </p>
           <div className="social-links">
-            <a href="https://www.facebook.com" aria-label="MSR Civil Solutions on Facebook">
+            <a
+              href="https://www.facebook.com"
+              aria-label="MSR Civil Solutions on Facebook"
+              target="_blank"
+              rel="noreferrer"
+            >
               <Facebook size={18} />
             </a>
-            <a href="https://www.instagram.com" aria-label="MSR Civil Solutions on Instagram">
+            <a
+              href="https://www.instagram.com"
+              aria-label="MSR Civil Solutions on Instagram"
+              target="_blank"
+              rel="noreferrer"
+            >
               <Instagram size={18} />
             </a>
           </div>

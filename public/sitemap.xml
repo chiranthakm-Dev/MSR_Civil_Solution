@@ -25,6 +25,10 @@
     <priority>0.9</priority>
   </url>
   <url>
+    <loc>https://msrcivilsolutions.com/.well-known/security.txt</loc>
+    <priority>0.1</priority>
+  </url>
+  <url>
     <loc>https://msrcivilsolutions.com/projects/premium-villa-structure</loc>
     <priority>0.6</priority>
   </url>

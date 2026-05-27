@@ -207,12 +207,12 @@ Future phases can extend the same codebase into the quote calculator, customer p
 
 ### Deployment
 
-- [ ] Configure Vercel or Netlify
+- [x] Configure Vercel or Netlify
 - [ ] Add environment variables
 - [ ] Enable HTTPS
 - [ ] Add custom domain
 - [ ] Add deployment preview workflow
-- [ ] Add production build check
+- [x] Add production build check
 - [ ] Add basic monitoring
 
 ---
@@ -605,11 +605,11 @@ Future phases can extend the same codebase into the quote calculator, customer p
 - [ ] Add rate limiting for auth and forms
 - [ ] Protect admin, customer, and employee routes
 - [ ] Never expose service role keys
-- [ ] Use environment variables for secrets
-- [ ] Add Content Security Policy
-- [ ] Add secure response headers
+- [x] Use environment variables for secrets
+- [x] Add Content Security Policy
+- [x] Add secure response headers
 - [ ] Add CSRF strategy if using cookie-based auth
-- [ ] Add dependency vulnerability checks
+- [x] Add dependency vulnerability checks
 
 ### Supabase Security
 

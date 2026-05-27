@@ -1,0 +1,4 @@
+Contact: mailto:hello@msrcivilsolutions.com
+Preferred-Languages: en
+Canonical: https://msrcivilsolutions.com/.well-known/security.txt
+Policy: https://msrcivilsolutions.com/contact

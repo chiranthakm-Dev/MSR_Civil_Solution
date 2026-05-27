@@ -40,6 +40,10 @@ const navItems = [
   { label: 'Contact', to: '/contact' },
 ];
 
+const SITE_URL = 'https://msrcivilsolutions.com';
+const DEFAULT_DESCRIPTION =
+  'MSR Civil Solutions delivers residential, commercial, and structural civil engineering work in Bengaluru with disciplined execution and transparent communication.';
+
 const services = [
   {
     title: 'Residential Construction',
@@ -190,6 +194,150 @@ function ScrollToTop() {
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'instant' });
+  }, [pathname]);
+
+  return null;
+}
+
+function upsertMeta(attribute: 'name' | 'property', key: string, content: string) {
+  let element = document.head.querySelector<HTMLMetaElement>(`meta[${attribute}="${key}"]`);
+
+  if (!element) {
+    element = document.createElement('meta');
+    element.setAttribute(attribute, key);
+    document.head.appendChild(element);
+  }
+
+  element.content = content;
+}
+
+function upsertCanonical(href: string) {
+  let element = document.head.querySelector<HTMLLinkElement>('link[rel="canonical"]');
+
+  if (!element) {
+    element = document.createElement('link');
+    element.rel = 'canonical';
+    document.head.appendChild(element);
+  }
+
+  element.href = href;
+}
+
+function upsertJsonLd(id: string, data: object) {
+  let element = document.head.querySelector<HTMLScriptElement>(`script[data-jsonld="${id}"]`);
+
+  if (!element) {
+    element = document.createElement('script');
+    element.type = 'application/ld+json';
+    element.dataset.jsonld = id;
+    document.head.appendChild(element);
+  }
+
+  element.textContent = JSON.stringify(data);
+}
+
+function MetaManager() {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    const project = projects.find((item) => pathname === `/projects/${item.slug}`);
+    const post = posts.find((item) => pathname === `/blog/${item.slug}`);
+
+    const routeMeta: Record<string, { title: string; description: string }> = {
+      '/': {
+        title: 'MSR Civil Solutions | Civil Construction & Engineering Bengaluru',
+        description: DEFAULT_DESCRIPTION,
+      },
+      '/about': {
+        title: 'About MSR Civil Solutions | Civil Contractors in Bengaluru',
+        description:
+          'Learn about MSR Civil Solutions, a Bengaluru civil construction team focused on disciplined planning, site supervision, and transparent delivery.',
+      },
+      '/services': {
+        title: 'Construction Services | MSR Civil Solutions',
+        description:
+          'Residential construction, commercial buildings, structural consultancy, renovation, and site development services from MSR Civil Solutions.',
+      },
+      '/projects': {
+        title: 'Civil Construction Projects | MSR Civil Solutions',
+        description:
+          'Explore representative residential, commercial, structural, and site development projects from MSR Civil Solutions.',
+      },
+      '/blog': {
+        title: 'Construction Blog | MSR Civil Solutions',
+        description:
+          'Practical construction notes, estimate explainers, material guidance, and civil planning advice from MSR Civil Solutions.',
+      },
+      '/contact': {
+        title: 'Contact MSR Civil Solutions | Bengaluru Civil Contractor',
+        description:
+          'Contact MSR Civil Solutions in Bengaluru for construction enquiries, civil work discussions, and quote requests.',
+      },
+    };
+
+    const meta = project
+      ? {
+          title: `${project.title} | MSR Civil Solutions Projects`,
+          description: project.summary,
+        }
+      : post
+        ? {
+            title: `${post.title} | MSR Civil Solutions Blog`,
+            description: post.excerpt,
+          }
+        : routeMeta[pathname] ?? {
+            title: 'Page Not Found | MSR Civil Solutions',
+            description: 'The requested MSR Civil Solutions page could not be found.',
+          };
+
+    const canonical = `${SITE_URL}${pathname === '/' ? '' : pathname}`;
+
+    document.title = meta.title;
+    upsertMeta('name', 'description', meta.description);
+    upsertMeta('property', 'og:title', meta.title);
+    upsertMeta('property', 'og:description', meta.description);
+    upsertMeta('property', 'og:type', post ? 'article' : 'website');
+    upsertMeta('property', 'og:url', canonical);
+    upsertMeta('property', 'og:site_name', 'MSR Civil Solutions');
+    upsertMeta('name', 'twitter:card', 'summary_large_image');
+    upsertCanonical(canonical);
+
+    upsertJsonLd('local-business', {
+      '@context': 'https://schema.org',
+      '@type': 'GeneralContractor',
+      name: 'MSR Civil Solutions',
+      url: SITE_URL,
+      telephone: '+91 96115 14928',
+      address: {
+        '@type': 'PostalAddress',
+        addressLocality: 'Bengaluru',
+        addressCountry: 'IN',
+      },
+      areaServed: 'Bengaluru, India',
+      serviceType: [
+        'Residential Construction',
+        'Commercial Buildings',
+        'Structural Consultancy',
+        'Renovation',
+        'Site Development',
+      ],
+    });
+
+    if (post) {
+      upsertJsonLd('article', {
+        '@context': 'https://schema.org',
+        '@type': 'Article',
+        headline: post.title,
+        description: post.excerpt,
+        datePublished: post.date,
+        author: {
+          '@type': 'Organization',
+          name: 'MSR Civil Solutions',
+        },
+      });
+    } else {
+      document.head.querySelector('script[data-jsonld="article"]')?.remove();
+    }
   }, [pathname]);
 
   return null;
@@ -900,6 +1048,7 @@ function AppShell() {
 export function App() {
   return (
     <BrowserRouter>
+      <MetaManager />
       <ScrollToTop />
       <AppShell />
     </BrowserRouter>

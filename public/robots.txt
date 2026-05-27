@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://msrcivilsolutions.com/sitemap.xml

@@ -171,14 +171,14 @@ Future phases can extend the same codebase into the quote calculator, customer p
 
 ### SEO
 
-- [ ] Add unique page titles
-- [ ] Add meta descriptions
-- [ ] Add Open Graph metadata
-- [ ] Add canonical URLs
-- [ ] Add sitemap
-- [ ] Add robots.txt
-- [ ] Add structured data for local business
-- [ ] Add structured data for blog articles
+- [x] Add unique page titles
+- [x] Add meta descriptions
+- [x] Add Open Graph metadata
+- [x] Add canonical URLs
+- [x] Add sitemap
+- [x] Add robots.txt
+- [x] Add structured data for local business
+- [x] Add structured data for blog articles
 - [ ] Use semantic headings
 - [ ] Make project and blog URLs clean and readable
 

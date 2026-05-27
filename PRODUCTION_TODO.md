@@ -14,16 +14,17 @@ Future phases can extend the same codebase into the quote calculator, customer p
 
 ### App Setup
 
-- [ ] Create React + Vite + TypeScript project
-- [ ] Enable TypeScript strict mode
+- [x] Create React + Vite + TypeScript project
+- [x] Enable TypeScript strict mode
 - [ ] Install and configure TailwindCSS
-- [ ] Add React Router
+- [x] Add React Router
 - [ ] Add React Hook Form
 - [ ] Add Zod for validation
 - [ ] Add TanStack Query only when dynamic data is introduced
 - [ ] Add Zustand only if shared UI/application state becomes necessary
-- [ ] Add ESLint and Prettier
-- [ ] Create `.env.example`
+- [x] Add ESLint
+- [ ] Add Prettier
+- [x] Create `.env.example`
 - [ ] Create production-safe folder structure
 
 ### Suggested Folder Structure
@@ -41,14 +42,14 @@ Future phases can extend the same codebase into the quote calculator, customer p
 
 ### Design System Foundation
 
-- [ ] Add MSR dark industrial color tokens
-- [ ] Add Barlow font family imports
-- [ ] Add base typography styles
-- [ ] Add reusable button styles
-- [ ] Add section spacing utilities
-- [ ] Add responsive container utility
-- [ ] Add card, grid, and image treatment patterns
-- [ ] Add accessible focus states
+- [x] Add MSR dark industrial color tokens
+- [x] Add Barlow font family imports
+- [x] Add base typography styles
+- [x] Add reusable button styles
+- [x] Add section spacing utilities
+- [x] Add responsive container utility
+- [x] Add card, grid, and image treatment patterns
+- [x] Add accessible focus states
 
 ---
 
@@ -56,102 +57,102 @@ Future phases can extend the same codebase into the quote calculator, customer p
 
 ### Global Website Features
 
-- [ ] Fixed responsive navigation bar
-- [ ] Desktop navigation links
-- [ ] Mobile hamburger menu
-- [ ] Scroll-aware navbar background
-- [ ] Footer with company details
-- [ ] WhatsApp click-to-chat link
-- [ ] Phone and email quick actions
-- [ ] Smooth section/page navigation
-- [ ] Responsive layout for mobile, tablet, and desktop
-- [ ] 404 page
+- [x] Fixed responsive navigation bar
+- [x] Desktop navigation links
+- [x] Mobile hamburger menu
+- [x] Scroll-aware navbar background
+- [x] Footer with company details
+- [x] WhatsApp click-to-chat link
+- [x] Phone and email quick actions
+- [x] Smooth section/page navigation
+- [x] Responsive layout for mobile, tablet, and desktop
+- [x] 404 page
 - [ ] Basic loading and empty states where needed
 
 ### Home Page
 
-- [ ] Full-screen hero section with construction photography
-- [ ] Hero headline and supporting text
-- [ ] Primary CTA: Get a Free Quote
-- [ ] Secondary CTA: View Our Projects
-- [ ] Services preview section
-- [ ] Why Choose MSR section
-- [ ] Featured projects section
-- [ ] Client testimonials section
-- [ ] Bottom CTA strip
-- [ ] Footer
+- [x] Full-screen hero section with construction photography
+- [x] Hero headline and supporting text
+- [x] Primary CTA: Get a Free Quote
+- [x] Secondary CTA: View Our Projects
+- [x] Services preview section
+- [x] Why Choose MSR section
+- [x] Featured projects section
+- [x] Client testimonials section
+- [x] Bottom CTA strip
+- [x] Footer
 
 ### About Page
 
-- [ ] Company overview
-- [ ] Mission and vision section
-- [ ] Core values section
+- [x] Company overview
+- [x] Mission and vision section
+- [x] Core values section
 - [ ] Company history/timeline
 - [ ] Team section placeholder
 - [ ] Certifications and licenses placeholder
-- [ ] CTA to contact MSR
+- [x] CTA to contact MSR
 
 ### Services Page
 
-- [ ] Residential construction service
-- [ ] Commercial buildings service
-- [ ] Structural consultancy service
-- [ ] Site development service
-- [ ] Renovation service
-- [ ] Service detail cards with descriptions
-- [ ] Typical timeline/content area per service
-- [ ] CTA to request quote/contact
+- [x] Residential construction service
+- [x] Commercial buildings service
+- [x] Structural consultancy service
+- [x] Site development service
+- [x] Renovation service
+- [x] Service detail cards with descriptions
+- [x] Typical timeline/content area per service
+- [x] CTA to request quote/contact
 
 ### Projects Page
 
-- [ ] Projects grid
-- [ ] Project category display
-- [ ] Project year/location display
-- [ ] Project image cards
-- [ ] Category filter UI
+- [x] Projects grid
+- [x] Project category display
+- [x] Project year/location display
+- [x] Project image cards
+- [x] Category filter UI
 - [ ] Year filter UI
 - [ ] Empty state for no matching projects
 
 ### Project Detail Page
 
-- [ ] Project title and category
+- [x] Project title and category
 - [ ] Photo gallery
-- [ ] Project description
-- [ ] Scope of work
+- [x] Project description
+- [x] Scope of work
 - [ ] Optional client name
-- [ ] Key stats: area, floors, duration, value
+- [x] Key stats: area, floors, duration, value
 - [ ] Related projects section
 
 ### Blog Page
 
-- [ ] Blog listing page
-- [ ] Blog card component
-- [ ] Tag display
+- [x] Blog listing page
+- [x] Blog card component
+- [x] Tag display
 - [ ] Tag filter UI
-- [ ] Blog search placeholder or basic search
+- [x] Blog search placeholder or basic search
 
 ### Blog Detail Page
 
-- [ ] Article title
-- [ ] Published date
-- [ ] Tags
-- [ ] Rich article content layout
+- [x] Article title
+- [x] Published date
+- [x] Tags
+- [x] Rich article content layout
 - [ ] Related posts section
 
 ### Contact Page
 
-- [ ] Enquiry form
-- [ ] Name field
-- [ ] Email field
-- [ ] Phone field
-- [ ] Project type field
-- [ ] Message field
-- [ ] Optional file attachment UI
-- [ ] Business hours
-- [ ] Address section
+- [x] Enquiry form
+- [x] Name field
+- [x] Email field
+- [x] Phone field
+- [x] Project type field
+- [x] Message field
+- [x] Optional file attachment UI
+- [x] Business hours
+- [x] Address section
 - [ ] Google Maps embed
-- [ ] WhatsApp link
-- [ ] Success and error states
+- [x] WhatsApp link
+- [x] Success and error states
 
 ---
 
@@ -712,4 +713,3 @@ Future phases can extend the same codebase into the quote calculator, customer p
 - [ ] Build testimonials section
 - [ ] Build contact CTA strip
 - [ ] Verify responsive layout
-

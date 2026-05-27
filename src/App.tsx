@@ -477,7 +477,7 @@ function ContactCta() {
           understand the next practical step.
         </p>
         <div className="contact-actions">
-          <a className="btn btn-primary" href="tel:+919876543210">
+          <a className="btn btn-primary" href="tel:+919611514928">
             <Phone size={18} /> Call Now
           </a>
           <Link className="btn btn-secondary" to="/contact">
@@ -766,10 +766,10 @@ function ContactPage() {
           <aside className="contact-panel">
             <h2>Direct contact</h2>
             <p>
-              <MapPin size={18} /> Pune, Maharashtra
+              <MapPin size={18} /> Bengaluru, India
             </p>
-            <a href="tel:+919876543210">
-              <Phone size={18} /> +91 98765 43210
+            <a href="tel:+919611514928">
+              <Phone size={18} /> +91 96115 14928
             </a>
             <a href="mailto:hello@msrcivilsolutions.com">
               <Mail size={18} /> hello@msrcivilsolutions.com
@@ -843,10 +843,10 @@ function Footer() {
         <div>
           <h2>Contact</h2>
           <p>
-            <MapPin size={16} /> Pune, Maharashtra
+            <MapPin size={16} /> Bengaluru, India
           </p>
           <p>
-            <Phone size={16} /> +91 98765 43210
+            <Phone size={16} /> +91 96115 14928
           </p>
           <p>
             <Mail size={16} /> hello@msrcivilsolutions.com
@@ -888,7 +888,7 @@ function AppShell() {
       <Footer />
       <a
         className="floating-whatsapp"
-        href="https://wa.me/919876543210"
+        href="https://wa.me/919611514928"
         aria-label="Contact MSR Civil Solutions on WhatsApp"
       >
         <CheckCircle2 size={18} /> WhatsApp

@@ -1,14 +1,20 @@
 import {
   ArrowRight,
   Award,
+  BriefcaseBusiness,
   Building2,
+  CalendarCheck,
   CheckCircle2,
   ChevronRight,
   ClipboardCheck,
   Clock3,
+  Database,
   Facebook,
   Factory,
+  FileText,
   Instagram,
+  IndianRupee,
+  LogIn,
   Mail,
   MapPin,
   Menu,
@@ -17,6 +23,9 @@ import {
   Search,
   ShieldCheck,
   Star,
+  UploadCloud,
+  UserCog,
+  Users,
   Wrench,
   X,
 } from 'lucide-react';
@@ -91,6 +100,72 @@ const stats = [
   { title: 'Licensed Team', subtitle: 'Engineers and supervisors', icon: ShieldCheck },
   { title: 'Fast Quotes', subtitle: 'Clear preliminary estimates', icon: Clock3 },
   { title: 'Site Discipline', subtitle: 'Tracked progress and safety', icon: ClipboardCheck },
+];
+
+const adminMetrics = [
+  { label: 'Active Projects', value: '12', icon: BriefcaseBusiness },
+  { label: 'Present Today', value: '28', icon: CalendarCheck },
+  { label: 'Pending Quotes', value: '7', icon: FileText },
+  { label: 'New Customers', value: '18', icon: Users },
+];
+
+const todayLabel = new Intl.DateTimeFormat('en-IN', {
+  day: '2-digit',
+  month: 'short',
+  year: 'numeric',
+}).format(new Date());
+
+const adminModules = [
+  {
+    title: 'Rate Management',
+    description: 'Edit base rates, zone multipliers, inclusions, and calculator test values.',
+    icon: IndianRupee,
+  },
+  {
+    title: 'Project Management',
+    description: 'Create projects, upload drawings, assign employees, and track stage progress.',
+    icon: BriefcaseBusiness,
+  },
+  {
+    title: 'Employee Management',
+    description: 'Add employees, reset passwords, review attendance, and approve leave requests.',
+    icon: UserCog,
+  },
+  {
+    title: 'Content Management',
+    description: 'Manage portfolio projects, blog posts, services, testimonials, and team members.',
+    icon: Database,
+  },
+];
+
+const employeeMetrics = [
+  { label: 'Today', value: todayLabel, icon: Clock3 },
+  { label: 'Attendance', value: 'Not marked', icon: CalendarCheck },
+  { label: 'Assigned Projects', value: '3', icon: BriefcaseBusiness },
+  { label: 'Pending Reports', value: '2', icon: UploadCloud },
+];
+
+const employeeModules = [
+  {
+    title: 'Mark Attendance',
+    description: 'Submit today’s attendance before the configured cutoff time.',
+    icon: CalendarCheck,
+  },
+  {
+    title: 'My Projects',
+    description: 'View assigned project details, drawings, BOQ files, and scope notes.',
+    icon: BriefcaseBusiness,
+  },
+  {
+    title: 'Progress Reports',
+    description: 'Upload site photos, work stage, notes, and percentage completion.',
+    icon: UploadCloud,
+  },
+  {
+    title: 'Leave Requests',
+    description: 'Submit leave requests and track admin approval status.',
+    icon: ClipboardCheck,
+  },
 ];
 
 const projects = [
@@ -335,6 +410,26 @@ function MetaManager() {
         description:
           'Contact MSR Civil Solutions in Bengaluru for construction enquiries, civil work discussions, and quote requests.',
       },
+      '/admin/login': {
+        title: 'Admin Login | MSR Civil Solutions',
+        description:
+          'Secure admin login for MSR Civil Solutions management tools, rate management, projects, and content operations.',
+      },
+      '/admin': {
+        title: 'Admin Dashboard | MSR Civil Solutions',
+        description:
+          'MSR Civil Solutions admin dashboard preview for projects, rates, employees, quotes, and content management.',
+      },
+      '/employee/login': {
+        title: 'Employee Login | MSR Civil Solutions',
+        description:
+          'Employee login for MSR Civil Solutions attendance, assigned projects, files, and progress reporting.',
+      },
+      '/employee': {
+        title: 'Employee Dashboard | MSR Civil Solutions',
+        description:
+          'MSR Civil Solutions employee dashboard preview for attendance, projects, files, and progress reporting.',
+      },
     };
 
     const meta = project
@@ -362,6 +457,13 @@ function MetaManager() {
     upsertMeta('property', 'og:url', canonical);
     upsertMeta('property', 'og:site_name', 'MSR Civil Solutions');
     upsertMeta('name', 'twitter:card', 'summary_large_image');
+    upsertMeta(
+      'name',
+      'robots',
+      pathname.startsWith('/admin') || pathname.startsWith('/employee')
+        ? 'noindex,nofollow'
+        : 'index,follow',
+    );
     upsertCanonical(canonical);
 
     upsertJsonLd('local-business', {
@@ -1078,6 +1180,148 @@ function ContactPage() {
   );
 }
 
+function PortalLoginPage({
+  type,
+  title,
+  subtitle,
+  codeLabel,
+  dashboardPath,
+}: {
+  type: 'Admin' | 'Employee';
+  title: string;
+  subtitle: string;
+  codeLabel: string;
+  dashboardPath: string;
+}) {
+  return (
+    <>
+      <PageHero eyebrow={`${type} portal`} title={title} subtitle={subtitle} />
+      <section className="section section-dark" id="main-content">
+        <div className="container portal-login-layout">
+          <form className="portal-form">
+            <label>
+              {codeLabel}
+              <input autoComplete="username" placeholder={type === 'Admin' ? 'admin@msr' : 'EMP-001'} />
+            </label>
+            <label>
+              Password
+              <input autoComplete="current-password" placeholder="Enter password" type="password" />
+            </label>
+            <Link className="btn btn-primary full-field" to={dashboardPath}>
+              Continue to dashboard <LogIn size={18} />
+            </Link>
+            <p className="field-hint full-field">
+              Prototype route. Real login, session checks, and role permissions will be connected during the auth phase.
+            </p>
+          </form>
+          <aside className="portal-note">
+            <ShieldCheck size={34} />
+            <h2>Separate access, same website</h2>
+            <p>
+              This portal lives inside the same MSR website, but it will use its own protected route,
+              role checks, and database policies before production release.
+            </p>
+          </aside>
+        </div>
+      </section>
+    </>
+  );
+}
+
+function PortalDashboard({
+  eyebrow,
+  title,
+  subtitle,
+  metrics,
+  modules,
+}: {
+  eyebrow: string;
+  title: string;
+  subtitle: string;
+  metrics: typeof adminMetrics;
+  modules: typeof adminModules;
+}) {
+  return (
+    <>
+      <PageHero eyebrow={eyebrow} title={title} subtitle={subtitle} />
+      <section className="section section-dark" id="main-content">
+        <div className="container">
+          <div className="portal-metric-grid">
+            {metrics.map(({ label, value, icon: Icon }) => (
+              <article className="portal-metric-card" key={label}>
+                <span>
+                  <Icon size={22} />
+                </span>
+                <div>
+                  <p>{label}</p>
+                  <strong>{value}</strong>
+                </div>
+              </article>
+            ))}
+          </div>
+          <div className="portal-module-grid">
+            {modules.map(({ title: moduleTitle, description, icon: Icon }) => (
+              <article className="portal-module-card" key={moduleTitle}>
+                <Icon className="service-icon" size={30} />
+                <h2>{moduleTitle}</h2>
+                <p>{description}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+    </>
+  );
+}
+
+function AdminLoginPage() {
+  return (
+    <PortalLoginPage
+      type="Admin"
+      title="Management access for MSR operations"
+      subtitle="Admin tools for rates, projects, employees, quotes, customers, and website content."
+      codeLabel="Admin email"
+      dashboardPath="/admin"
+    />
+  );
+}
+
+function EmployeeLoginPage() {
+  return (
+    <PortalLoginPage
+      type="Employee"
+      title="Field team access for daily site work"
+      subtitle="Employee tools for attendance, assigned projects, project files, and progress reporting."
+      codeLabel="Employee ID"
+      dashboardPath="/employee"
+    />
+  );
+}
+
+function AdminDashboardPage() {
+  return (
+    <PortalDashboard
+      eyebrow="Admin dashboard"
+      title="Control panel for projects, rates, people, and content"
+      subtitle="This dashboard preview maps the PRD modules into one management surface. Auth, database writes, and audit logs come next."
+      metrics={adminMetrics}
+      modules={adminModules}
+    />
+  );
+}
+
+function EmployeeDashboardPage() {
+  return (
+    <PortalDashboard
+      eyebrow="Employee dashboard"
+      title="Daily site workflow for field employees"
+      subtitle="Attendance, assigned projects, file access, and progress reporting stay in the same website with employee-only access."
+      metrics={employeeMetrics}
+      modules={employeeModules}
+    />
+  );
+}
+
 function NotFoundPage() {
   return (
     <>
@@ -1142,6 +1386,9 @@ function Footer() {
               {service.title}
             </Link>
           ))}
+          <h2 className="footer-subhead">Portals</h2>
+          <Link to="/employee/login">Employee Login</Link>
+          <Link to="/admin/login">Admin Login</Link>
         </div>
         <div>
           <h2>Contact</h2>
@@ -1185,6 +1432,10 @@ function AppShell() {
           <Route path="/blog" element={<BlogPage />} />
           <Route path="/blog/:slug" element={<BlogDetailPage />} />
           <Route path="/contact" element={<ContactPage />} />
+          <Route path="/admin/login" element={<AdminLoginPage />} />
+          <Route path="/admin" element={<AdminDashboardPage />} />
+          <Route path="/employee/login" element={<EmployeeLoginPage />} />
+          <Route path="/employee" element={<EmployeeDashboardPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </main>

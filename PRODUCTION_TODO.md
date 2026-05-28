@@ -357,7 +357,7 @@ Future phases can extend the same codebase into the quote calculator, customer p
 
 ### Admin Authentication
 
-- [ ] Separate `/admin/login` route
+- [x] Separate `/admin/login` route
 - [ ] Admin-only route protection
 - [ ] Admin role checks through database policies
 - [ ] Unauthorized page
@@ -365,12 +365,12 @@ Future phases can extend the same codebase into the quote calculator, customer p
 
 ### Admin Dashboard
 
-- [ ] Active projects summary
-- [ ] Employees present today summary
-- [ ] Pending quote requests summary
-- [ ] New customer registrations summary
+- [x] Active projects summary
+- [x] Employees present today summary
+- [x] Pending quote requests summary
+- [x] New customer registrations summary
 - [ ] Recent activity feed
-- [ ] Quick links to admin sections
+- [x] Quick links to admin sections
 
 ### Rate Management
 
@@ -468,18 +468,18 @@ Future phases can extend the same codebase into the quote calculator, customer p
 
 ### Employee Authentication
 
-- [ ] Separate `/employee/login` route
-- [ ] Employee ID and password login
+- [x] Separate `/employee/login` route
+- [x] Employee ID and password login
 - [ ] Employee-only route protection
 - [ ] Employee account active/inactive checks
 
 ### Employee Dashboard
 
-- [ ] Today date display
-- [ ] Attendance status display
-- [ ] Assigned project list
+- [x] Today date display
+- [x] Attendance status display
+- [x] Assigned project list
 - [ ] Current project status display
-- [ ] Pending tasks or admin notes
+- [x] Pending tasks or admin notes
 
 ### Attendance
 

@@ -754,7 +754,8 @@ a {
 
 .contact-form input,
 .contact-form select,
-.contact-form textarea {
+.contact-form textarea,
+.portal-form input {
   background: var(--color-bg-darkest);
   border: 1px solid var(--color-border-light);
   border-radius: 4px;
@@ -827,6 +828,107 @@ a {
   font-weight: 700;
   justify-content: center;
   min-height: 220px;
+}
+
+.portal-login-layout {
+  align-items: start;
+  display: grid;
+  gap: 32px;
+  grid-template-columns: 1fr 0.85fr;
+}
+
+.portal-form,
+.portal-note,
+.portal-metric-card,
+.portal-module-card {
+  background: var(--color-bg-mid);
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  padding: 24px;
+}
+
+.portal-form {
+  display: grid;
+  gap: 18px;
+  grid-template-columns: 1fr;
+}
+
+.portal-form label {
+  color: var(--color-text-secondary);
+  display: grid;
+  font-size: 14px;
+  font-weight: 700;
+  gap: 8px;
+}
+
+.portal-note {
+  border-left: 3px solid var(--color-accent-gold);
+}
+
+.portal-note svg {
+  color: var(--color-accent-gold);
+}
+
+.portal-note h2,
+.portal-module-card h2 {
+  font-family: 'Barlow Semi Condensed', sans-serif;
+  margin: 16px 0 10px;
+}
+
+.portal-note p,
+.portal-module-card p,
+.portal-metric-card p {
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.portal-metric-grid {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin-bottom: 28px;
+}
+
+.portal-metric-card {
+  align-items: center;
+  display: flex;
+  gap: 14px;
+}
+
+.portal-metric-card > span {
+  align-items: center;
+  background: var(--color-accent-gold);
+  border-radius: 999px;
+  color: var(--color-text-on-gold);
+  display: inline-flex;
+  flex: 0 0 auto;
+  height: 42px;
+  justify-content: center;
+  width: 42px;
+}
+
+.portal-metric-card strong {
+  color: var(--color-text-primary);
+  display: block;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 28px;
+  line-height: 1;
+  margin-top: 5px;
+}
+
+.portal-module-grid {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.portal-module-card {
+  min-height: 220px;
+}
+
+.footer-subhead {
+  margin-top: 24px !important;
 }
 
 .testimonials {
@@ -1078,7 +1180,9 @@ a {
 
   .grid-services,
   .project-grid,
-  .blog-grid {
+  .blog-grid,
+  .portal-metric-grid,
+  .portal-module-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
@@ -1087,7 +1191,8 @@ a {
   .footer-grid,
   .split-content,
   .project-detail,
-  .contact-layout {
+  .contact-layout,
+  .portal-login-layout {
     grid-template-columns: 1fr 1fr;
   }
 }
@@ -1126,7 +1231,10 @@ a {
   .project-detail,
   .contact-layout,
   .blog-grid,
-  .contact-form {
+  .contact-form,
+  .portal-login-layout,
+  .portal-metric-grid,
+  .portal-module-grid {
     grid-template-columns: 1fr;
   }
 

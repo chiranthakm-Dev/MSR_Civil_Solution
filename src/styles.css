@@ -970,6 +970,12 @@ a {
   min-height: 220px;
 }
 
+.portal-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
 .quote-summary {
   border-left: 3px solid var(--color-accent-gold);
 }
@@ -1014,6 +1020,70 @@ a {
 .quote-breakdown strong {
   color: var(--color-text-primary);
   text-align: right;
+}
+
+.saved-quote-grid {
+  display: grid;
+  gap: 18px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.saved-quote-card {
+  background: var(--color-bg-mid);
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  display: block;
+  padding: 24px;
+  transition: background 0.2s ease, border-color 0.2s ease, transform 0.25s ease;
+}
+
+.saved-quote-card:hover {
+  background: var(--color-bg-light);
+  border-color: var(--color-accent-gold);
+  transform: translateY(-3px);
+}
+
+.saved-quote-card p {
+  color: var(--color-accent-gold);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  margin: 0 0 12px;
+  text-transform: uppercase;
+}
+
+.saved-quote-card h2 {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 30px;
+  line-height: 1.05;
+  margin: 0 0 14px;
+}
+
+.saved-quote-card span {
+  color: var(--color-text-secondary);
+}
+
+.quote-detail-layout {
+  display: grid;
+  gap: 32px;
+  grid-template-columns: 0.9fr 1.1fr;
+}
+
+.quote-chip-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 18px 0 24px;
+}
+
+.quote-chip-list span {
+  background: var(--color-bg-darkest);
+  border: 1px solid var(--color-border-light);
+  border-radius: 999px;
+  color: var(--color-text-secondary);
+  font-size: 13px;
+  font-weight: 700;
+  padding: 8px 12px;
 }
 
 .footer-subhead {
@@ -1270,6 +1340,7 @@ a {
   .grid-services,
   .project-grid,
   .blog-grid,
+  .saved-quote-grid,
   .portal-metric-grid,
   .portal-module-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1282,6 +1353,7 @@ a {
   .project-detail,
   .contact-layout,
   .quote-layout,
+  .quote-detail-layout,
   .portal-login-layout {
     grid-template-columns: 1fr 1fr;
   }
@@ -1321,7 +1393,9 @@ a {
   .project-detail,
   .contact-layout,
   .quote-layout,
+  .quote-detail-layout,
   .blog-grid,
+  .saved-quote-grid,
   .contact-form,
   .portal-login-layout,
   .portal-metric-grid,

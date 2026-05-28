@@ -332,9 +332,9 @@ Future phases can extend the same codebase into the quote calculator, customer p
 
 ### Quote Storage
 
-- [ ] Save generated quote
-- [ ] My Quotes list
-- [ ] Quote detail page
+- [x] Save generated quote
+- [x] My Quotes list
+- [x] Quote detail page
 - [ ] Download quote PDF
 - [ ] Formal quotation request
 - [ ] Quote request status: Pending

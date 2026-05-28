@@ -39,6 +39,7 @@ import {
   Route,
   Routes,
   useLocation,
+  useNavigate,
   useParams,
 } from 'react-router-dom';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -357,6 +358,38 @@ const contactSchema = z
 
 type ContactFormValues = z.infer<typeof contactSchema>;
 
+type SavedQuote = {
+  id: string;
+  createdAt: string;
+  area: number;
+  floors: number;
+  builtUpArea: number;
+  finish: 'Economy' | 'Standard' | 'Premium' | 'Luxury';
+  usage: 'Residential' | 'Commercial' | 'Industrial';
+  zone: 'Urban' | 'Semi-urban' | 'Rural';
+  soil: 'Hard rock' | 'Soft rock' | 'Murrum' | 'Black cotton' | 'Sandy';
+  access: 'Easy access' | 'Narrow lane' | 'Restricted';
+  lowEstimate: number;
+  highEstimate: number;
+  timelineMonths: number;
+  selectedInclusions: string[];
+};
+
+const savedQuotesStorageKey = 'msr.savedQuotes';
+
+function getSavedQuotes(): SavedQuote[] {
+  try {
+    const rawQuotes = window.localStorage.getItem(savedQuotesStorageKey);
+    return rawQuotes ? (JSON.parse(rawQuotes) as SavedQuote[]) : [];
+  } catch {
+    return [];
+  }
+}
+
+function setSavedQuotes(quotes: SavedQuote[]) {
+  window.localStorage.setItem(savedQuotesStorageKey, JSON.stringify(quotes));
+}
+
 function ScrollToTop() {
   const { pathname } = useLocation();
 
@@ -475,6 +508,11 @@ function MetaManager() {
         title: 'Construction Estimate Calculator | MSR Civil Solutions',
         description:
           'Generate a preliminary residential or commercial construction estimate with MSR Civil Solutions.',
+      },
+      '/customer/quotes': {
+        title: 'My Quotes | MSR Civil Solutions',
+        description:
+          'Review locally saved MSR Civil Solutions construction estimate quotes before database storage is connected.',
       },
     };
 
@@ -1401,9 +1439,12 @@ function CustomerDashboardPage() {
         modules={customerModules}
       />
       <section className="section section-darkest">
-        <div className="container">
+        <div className="container portal-actions">
           <Link className="btn btn-primary" to="/customer/quote">
             Open estimate calculator <Calculator size={18} />
+          </Link>
+          <Link className="btn btn-secondary" to="/customer/quotes">
+            View saved quotes
           </Link>
         </div>
       </section>
@@ -1412,6 +1453,8 @@ function CustomerDashboardPage() {
 }
 
 function CustomerQuotePage() {
+  const navigate = useNavigate();
+  const [saveMessage, setSaveMessage] = useState('');
   const [area, setArea] = useState(1200);
   const [floors, setFloors] = useState(1);
   const [finish, setFinish] = useState<'Economy' | 'Standard' | 'Premium' | 'Luxury'>('Standard');
@@ -1542,6 +1585,27 @@ function CustomerQuotePage() {
       [key]: !current[key],
     }));
   };
+  const saveQuote = () => {
+    const quote: SavedQuote = {
+      id: `${Date.now()}`,
+      createdAt: new Date().toISOString(),
+      area,
+      floors,
+      builtUpArea,
+      finish,
+      usage,
+      zone,
+      soil,
+      access,
+      lowEstimate,
+      highEstimate,
+      timelineMonths,
+      selectedInclusions,
+    };
+    setSavedQuotes([quote, ...getSavedQuotes()].slice(0, 20));
+    setSaveMessage('Quote saved locally in this browser.');
+    navigate(`/customer/quotes/${quote.id}`);
+  };
 
   return (
     <>
@@ -1669,7 +1733,114 @@ function CustomerQuotePage() {
             <Link className="btn btn-primary" to="/contact">
               Request formal quotation <ArrowRight size={18} />
             </Link>
+            <button className="btn btn-secondary" type="button" onClick={saveQuote}>
+              Save quote
+            </button>
+            {saveMessage ? <p className="field-hint">{saveMessage}</p> : null}
           </aside>
+        </div>
+      </section>
+    </>
+  );
+}
+
+function CustomerQuotesPage() {
+  const [savedQuotes] = useState<SavedQuote[]>(() => getSavedQuotes());
+  const currency = new Intl.NumberFormat('en-IN', {
+    currency: 'INR',
+    maximumFractionDigits: 0,
+    style: 'currency',
+  });
+
+  return (
+    <>
+      <PageHero
+        eyebrow="My quotes"
+        title="Review saved construction estimates"
+        subtitle="Quotes are currently saved locally in this browser. Database-backed quote history comes with the customer auth phase."
+      />
+      <section className="section section-dark" id="main-content">
+        <div className="container">
+          {savedQuotes.length > 0 ? (
+            <div className="saved-quote-grid">
+              {savedQuotes.map((quote) => (
+                <Link className="saved-quote-card" key={quote.id} to={`/customer/quotes/${quote.id}`}>
+                  <p>{new Date(quote.createdAt).toLocaleDateString('en-IN')}</p>
+                  <h2>
+                    {currency.format(quote.lowEstimate)} - {currency.format(quote.highEstimate)}
+                  </h2>
+                  <span>
+                    {quote.builtUpArea.toLocaleString('en-IN')} sq.ft. · {quote.finish} · {quote.usage}
+                  </span>
+                </Link>
+              ))}
+            </div>
+          ) : (
+            <div className="empty-state">
+              <p>No saved quotes yet. Generate a preliminary estimate and save it here.</p>
+              <Link className="btn btn-primary" to="/customer/quote">
+                Open calculator <Calculator size={18} />
+              </Link>
+            </div>
+          )}
+        </div>
+      </section>
+    </>
+  );
+}
+
+function CustomerQuoteDetailPage() {
+  const { id } = useParams();
+  const quote = getSavedQuotes().find((item) => item.id === id);
+  const currency = new Intl.NumberFormat('en-IN', {
+    currency: 'INR',
+    maximumFractionDigits: 0,
+    style: 'currency',
+  });
+
+  if (!quote) {
+    return <NotFoundPage />;
+  }
+
+  return (
+    <>
+      <PageHero
+        eyebrow="Saved quote"
+        title={`${currency.format(quote.lowEstimate)} - ${currency.format(quote.highEstimate)}`}
+        subtitle={`Saved on ${new Date(quote.createdAt).toLocaleString('en-IN')} for ${quote.builtUpArea.toLocaleString('en-IN')} sq.ft.`}
+      />
+      <section className="section section-dark" id="main-content">
+        <div className="container quote-detail-layout">
+          <div className="metric-grid">
+            <span>{quote.area.toLocaleString('en-IN')} sq.ft. / floor</span>
+            <span>{quote.floors} floor(s)</span>
+            <span>{quote.finish} finish</span>
+            <span>{quote.usage} use</span>
+            <span>{quote.zone}</span>
+            <span>{quote.soil}</span>
+            <span>{quote.access}</span>
+            <span>{quote.timelineMonths} months</span>
+          </div>
+          <article className="quote-summary">
+            <h2>Included scope</h2>
+            <div className="quote-chip-list">
+              {quote.selectedInclusions.map((item) => (
+                <span key={item}>{item}</span>
+              ))}
+            </div>
+            <p>
+              This quote is saved locally for review. When backend storage is connected,
+              quotes will be tied to customer accounts and can move into formal review status.
+            </p>
+            <div className="contact-actions">
+              <Link className="btn btn-primary" to="/contact">
+                Request formal quotation <ArrowRight size={18} />
+              </Link>
+              <Link className="btn btn-secondary" to="/customer/quotes">
+                Back to quotes
+              </Link>
+            </div>
+          </article>
         </div>
       </section>
     </>
@@ -1790,6 +1961,8 @@ function AppShell() {
           <Route path="/customer/login" element={<CustomerLoginPage />} />
           <Route path="/customer" element={<CustomerDashboardPage />} />
           <Route path="/customer/quote" element={<CustomerQuotePage />} />
+          <Route path="/customer/quotes" element={<CustomerQuotesPage />} />
+          <Route path="/customer/quotes/:id" element={<CustomerQuoteDetailPage />} />
           <Route path="/admin/login" element={<AdminLoginPage />} />
           <Route path="/admin" element={<AdminDashboardPage />} />
           <Route path="/employee/login" element={<EmployeeLoginPage />} />

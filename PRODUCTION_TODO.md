@@ -222,11 +222,11 @@ Future phases can extend the same codebase into the quote calculator, customer p
 ### Backend Foundation
 
 - [ ] Create Supabase project
-- [ ] Configure Supabase environment variables
-- [ ] Create public content tables
-- [ ] Enable Row Level Security
-- [ ] Add read policies for public published content
-- [ ] Add admin-only write policies
+- [x] Configure Supabase environment variables
+- [x] Create public content tables
+- [x] Enable Row Level Security
+- [x] Add read policies for public published content
+- [x] Add admin-only write policies
 
 ### Content Tables
 

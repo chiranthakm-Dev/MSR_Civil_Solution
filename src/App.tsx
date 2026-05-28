@@ -1416,6 +1416,23 @@ function CustomerQuotePage() {
   const [floors, setFloors] = useState(1);
   const [finish, setFinish] = useState<'Economy' | 'Standard' | 'Premium' | 'Luxury'>('Standard');
   const [usage, setUsage] = useState<'Residential' | 'Commercial' | 'Industrial'>('Residential');
+  const [zone, setZone] = useState<'Urban' | 'Semi-urban' | 'Rural'>('Urban');
+  const [soil, setSoil] = useState<'Hard rock' | 'Soft rock' | 'Murrum' | 'Black cotton' | 'Sandy'>('Murrum');
+  const [access, setAccess] = useState<'Easy access' | 'Narrow lane' | 'Restricted'>('Easy access');
+  const [inclusions, setInclusions] = useState({
+    electrical: true,
+    plumbing: true,
+    doorsWindows: true,
+    painting: true,
+    flooring: true,
+    waterproofing: true,
+    compound: false,
+    railing: false,
+    waterTank: true,
+    septicTank: false,
+    solar: false,
+    lift: false,
+  });
 
   const baseRates = {
     Economy: 1700,
@@ -1428,15 +1445,103 @@ function CustomerQuotePage() {
     Commercial: 1.12,
     Industrial: 1.2,
   };
+  const zoneMultiplier = {
+    Urban: 1.08,
+    'Semi-urban': 1,
+    Rural: 0.96,
+  };
+  const soilMultiplier = {
+    'Hard rock': 1.12,
+    'Soft rock': 1.04,
+    Murrum: 1,
+    'Black cotton': 1.15,
+    Sandy: 1.08,
+  };
+  const accessMultiplier = {
+    'Easy access': 1,
+    'Narrow lane': 1.06,
+    Restricted: 1.12,
+  };
+  const inclusionRates = {
+    electrical: 160,
+    plumbing: 145,
+    doorsWindows: 220,
+    painting: 95,
+    flooring: 180,
+    waterproofing: 65,
+    compound: 90,
+    railing: 55,
+    waterTank: 45,
+    septicTank: 65,
+    solar: 70,
+    lift: 180,
+  };
+  const inclusionLabels = {
+    electrical: 'Electrical',
+    plumbing: 'Plumbing',
+    doorsWindows: 'Doors & windows',
+    painting: 'Painting',
+    flooring: 'Flooring',
+    waterproofing: 'Waterproofing',
+    compound: 'Compound wall',
+    railing: 'Staircase railing',
+    waterTank: 'Water tank',
+    septicTank: 'Septic tank',
+    solar: 'Solar provision',
+    lift: 'Lift provision',
+  };
   const builtUpArea = area * floors;
-  const estimate = builtUpArea * baseRates[finish] * usageMultiplier[usage];
+  const baseEstimate =
+    builtUpArea *
+    baseRates[finish] *
+    usageMultiplier[usage] *
+    zoneMultiplier[zone] *
+    soilMultiplier[soil] *
+    accessMultiplier[access];
+  const inclusionTotal = Object.entries(inclusions).reduce((total, [key, enabled]) => {
+    if (!enabled) {
+      return total;
+    }
+
+    return total + builtUpArea * inclusionRates[key as keyof typeof inclusionRates];
+  }, 0);
+  const estimate = baseEstimate + inclusionTotal;
   const lowEstimate = estimate * 0.92;
   const highEstimate = estimate * 1.12;
+  const selectedInclusions = Object.entries(inclusions)
+    .filter(([, enabled]) => enabled)
+    .map(([key]) => inclusionLabels[key as keyof typeof inclusionLabels]);
+  const phaseBreakdownSource: [string, number][] = [
+    ['Foundation & substructure', 0.16],
+    ['RCC / structure work', 0.28],
+    ['Brickwork & masonry', 0.12],
+    ['Plastering & waterproofing', 0.1],
+    ['Electrical', inclusions.electrical ? 0.07 : 0],
+    ['Plumbing', inclusions.plumbing ? 0.07 : 0],
+    ['Flooring', inclusions.flooring ? 0.08 : 0],
+    ['Painting', inclusions.painting ? 0.05 : 0],
+    ['Doors & windows', inclusions.doorsWindows ? 0.05 : 0],
+    ['Miscellaneous & contingency', 0.09],
+  ];
+  const phaseBreakdown = phaseBreakdownSource.filter(([, ratio]) => ratio > 0);
+  const timelineMonths = Math.max(3, Math.round((floors * 2.5 + builtUpArea / 2800) * 10) / 10);
+  const materialEstimates = [
+    ['Cement', `${Math.round(builtUpArea * 0.42).toLocaleString('en-IN')} bags`],
+    ['Steel', `${Math.max(1, Math.round(builtUpArea * 0.0038 * 10) / 10)} MT`],
+    ['Bricks/blocks', `${Math.round(builtUpArea * 8.5).toLocaleString('en-IN')} units`],
+    ['Sand & aggregate', `${Math.round(builtUpArea * 1.25).toLocaleString('en-IN')} cu.ft.`],
+  ];
   const currency = new Intl.NumberFormat('en-IN', {
     currency: 'INR',
     maximumFractionDigits: 0,
     style: 'currency',
   });
+  const toggleInclusion = (key: keyof typeof inclusions) => {
+    setInclusions((current) => ({
+      ...current,
+      [key]: !current[key],
+    }));
+  };
 
   return (
     <>
@@ -1485,6 +1590,45 @@ function CustomerQuotePage() {
                 <option>Luxury</option>
               </select>
             </label>
+            <label>
+              Location / zone
+              <select value={zone} onChange={(event) => setZone(event.target.value as typeof zone)}>
+                <option>Urban</option>
+                <option>Semi-urban</option>
+                <option>Rural</option>
+              </select>
+            </label>
+            <label>
+              Soil type
+              <select value={soil} onChange={(event) => setSoil(event.target.value as typeof soil)}>
+                <option>Hard rock</option>
+                <option>Soft rock</option>
+                <option>Murrum</option>
+                <option>Black cotton</option>
+                <option>Sandy</option>
+              </select>
+            </label>
+            <label>
+              Site accessibility
+              <select value={access} onChange={(event) => setAccess(event.target.value as typeof access)}>
+                <option>Easy access</option>
+                <option>Narrow lane</option>
+                <option>Restricted</option>
+              </select>
+            </label>
+            <fieldset className="quote-inclusions full-field">
+              <legend>Inclusions</legend>
+              {Object.entries(inclusionLabels).map(([key, label]) => (
+                <label key={key}>
+                  <input
+                    checked={inclusions[key as keyof typeof inclusions]}
+                    type="checkbox"
+                    onChange={() => toggleInclusion(key as keyof typeof inclusions)}
+                  />
+                  {label}
+                </label>
+              ))}
+            </fieldset>
           </form>
           <aside className="quote-summary">
             <p className="eyebrow">Preliminary range</p>
@@ -1496,6 +1640,26 @@ function CustomerQuotePage() {
               <span>{currency.format(baseRates[finish])} / sq.ft.</span>
               <span>{finish} finish</span>
               <span>{usage} use</span>
+              <span>{timelineMonths} months</span>
+              <span>{selectedInclusions.length} inclusions</span>
+            </div>
+            <div className="quote-breakdown">
+              <h3>Phase-wise estimate</h3>
+              {phaseBreakdown.map(([label, ratio]) => (
+                <div key={label}>
+                  <span>{label}</span>
+                  <strong>{currency.format(estimate * ratio)}</strong>
+                </div>
+              ))}
+            </div>
+            <div className="quote-breakdown">
+              <h3>Material approximation</h3>
+              {materialEstimates.map(([label, value]) => (
+                <div key={label}>
+                  <span>{label}</span>
+                  <strong>{value}</strong>
+                </div>
+              ))}
             </div>
             <p>
               This is a planning estimate only. Final quotation is subject to

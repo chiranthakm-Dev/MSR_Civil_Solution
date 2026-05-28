@@ -284,9 +284,9 @@ Future phases can extend the same codebase into the quote calculator, customer p
 - [x] Plot/site area
 - [ ] Unit toggle: sq.ft. / sq.m.
 - [ ] Plot shape
-- [ ] Location/zone
-- [ ] Soil type
-- [ ] Site accessibility
+- [x] Location/zone
+- [x] Soil type
+- [x] Site accessibility
 - [x] Number of floors
 - [x] Built-up area per floor
 - [ ] Custom area per floor option
@@ -298,35 +298,35 @@ Future phases can extend the same codebase into the quote calculator, customer p
 - [x] Usage type
 - [ ] Usage sub-type
 - [x] Finishing grade
-- [ ] Electrical inclusion
-- [ ] Plumbing and sanitation inclusion
-- [ ] Windows and doors inclusion
-- [ ] Painting inclusion
-- [ ] Flooring inclusion
-- [ ] Waterproofing inclusion
-- [ ] Compound wall and gate inclusion
-- [ ] Staircase railing inclusion
-- [ ] Water tank inclusion
-- [ ] Septic tank inclusion
-- [ ] Solar provision inclusion
-- [ ] Lift provision inclusion
+- [x] Electrical inclusion
+- [x] Plumbing and sanitation inclusion
+- [x] Windows and doors inclusion
+- [x] Painting inclusion
+- [x] Flooring inclusion
+- [x] Waterproofing inclusion
+- [x] Compound wall and gate inclusion
+- [x] Staircase railing inclusion
+- [x] Water tank inclusion
+- [x] Septic tank inclusion
+- [x] Solar provision inclusion
+- [x] Lift provision inclusion
 
 ### Calculator Outputs
 
 - [x] Estimated construction cost range
 - [x] Cost per sq.ft.
-- [ ] Foundation and substructure breakdown
-- [ ] RCC/structure work breakdown
-- [ ] Brickwork and masonry breakdown
-- [ ] Plastering and waterproofing breakdown
-- [ ] Electrical breakdown
-- [ ] Plumbing breakdown
-- [ ] Flooring breakdown
-- [ ] Painting breakdown
-- [ ] Doors and windows breakdown
-- [ ] Miscellaneous and contingency breakdown
-- [ ] Estimated timeline by phase
-- [ ] Material quantity estimates
+- [x] Foundation and substructure breakdown
+- [x] RCC/structure work breakdown
+- [x] Brickwork and masonry breakdown
+- [x] Plastering and waterproofing breakdown
+- [x] Electrical breakdown
+- [x] Plumbing breakdown
+- [x] Flooring breakdown
+- [x] Painting breakdown
+- [x] Doors and windows breakdown
+- [x] Miscellaneous and contingency breakdown
+- [x] Estimated timeline by phase
+- [x] Material quantity estimates
 - [x] Disclaimer
 - [x] Request Formal Quotation CTA
 
@@ -347,8 +347,8 @@ Future phases can extend the same codebase into the quote calculator, customer p
 - [ ] No hardcoded production rates
 - [ ] Calculation utility tests
 - [x] Min/max range logic
-- [ ] Timeline formula
-- [ ] Material estimate formula
+- [x] Timeline formula
+- [x] Material estimate formula
 - [x] Clear warnings for approximate estimates
 
 ---

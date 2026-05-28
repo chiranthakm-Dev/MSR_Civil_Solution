@@ -874,6 +874,36 @@ a {
   gap: 8px;
 }
 
+.quote-inclusions {
+  border: 1px solid var(--color-border-light);
+  border-radius: 4px;
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin: 0;
+  padding: 18px;
+}
+
+.quote-inclusions legend {
+  color: var(--color-text-secondary);
+  font-size: 14px;
+  font-weight: 700;
+  padding: 0 8px;
+}
+
+.quote-inclusions label {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  font-weight: 600;
+  gap: 9px;
+}
+
+.quote-inclusions input {
+  accent-color: var(--color-accent-gold);
+  min-height: auto;
+}
+
 .portal-note {
   border-left: 3px solid var(--color-accent-gold);
 }
@@ -955,6 +985,35 @@ a {
   color: var(--color-text-secondary);
   line-height: 1.65;
   margin: 0 0 24px;
+}
+
+.quote-breakdown {
+  border-top: 1px solid var(--color-border);
+  display: grid;
+  gap: 10px;
+  margin: 24px 0;
+  padding-top: 20px;
+}
+
+.quote-breakdown h3 {
+  font-family: 'Barlow Semi Condensed', sans-serif;
+  margin: 0 0 4px;
+}
+
+.quote-breakdown div {
+  align-items: center;
+  display: flex;
+  gap: 16px;
+  justify-content: space-between;
+}
+
+.quote-breakdown span {
+  color: var(--color-text-secondary);
+}
+
+.quote-breakdown strong {
+  color: var(--color-text-primary);
+  text-align: right;
 }
 
 .footer-subhead {
@@ -1266,7 +1325,8 @@ a {
   .contact-form,
   .portal-login-layout,
   .portal-metric-grid,
-  .portal-module-grid {
+  .portal-module-grid,
+  .quote-inclusions {
     grid-template-columns: 1fr;
   }
 

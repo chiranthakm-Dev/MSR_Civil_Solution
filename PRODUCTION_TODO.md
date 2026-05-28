@@ -483,11 +483,11 @@ Future phases can extend the same codebase into the quote calculator, customer p
 
 ### Attendance
 
-- [ ] Mark Attendance button
+- [x] Mark Attendance button
 - [ ] Cutoff time enforcement
-- [ ] Store timestamp
+- [x] Store timestamp
 - [ ] Store device/IP audit information where possible
-- [ ] Attendance history calendar
+- [x] Attendance history calendar
 - [ ] Leave request form
 - [ ] Leave request status
 
@@ -508,12 +508,12 @@ Future phases can extend the same codebase into the quote calculator, customer p
 
 ### Progress Reporting
 
-- [ ] Upload up to 10 photos
-- [ ] Select work stage
-- [ ] Add progress note
-- [ ] Progress percentage slider
-- [ ] Timestamp submission
-- [ ] Immutable employee submissions
+- [x] Upload up to 10 photos
+- [x] Select work stage
+- [x] Add progress note
+- [x] Progress percentage slider
+- [x] Timestamp submission
+- [x] Immutable employee submissions
 - [ ] Admin-only delete/moderation if required
 
 ---

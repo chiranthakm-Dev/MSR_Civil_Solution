@@ -390,6 +390,52 @@ function setSavedQuotes(quotes: SavedQuote[]) {
   window.localStorage.setItem(savedQuotesStorageKey, JSON.stringify(quotes));
 }
 
+type AttendanceRecord = {
+  id: string;
+  date: string;
+  markedAt: string;
+  status: 'Present';
+};
+
+type ProgressReport = {
+  id: string;
+  projectName: string;
+  stage: string;
+  progressPct: number;
+  notes: string;
+  submittedAt: string;
+  photoCount: number;
+};
+
+const attendanceStorageKey = 'msr.employeeAttendance';
+const progressReportsStorageKey = 'msr.progressReports';
+
+function getAttendanceRecords(): AttendanceRecord[] {
+  try {
+    const rawRecords = window.localStorage.getItem(attendanceStorageKey);
+    return rawRecords ? (JSON.parse(rawRecords) as AttendanceRecord[]) : [];
+  } catch {
+    return [];
+  }
+}
+
+function setAttendanceRecords(records: AttendanceRecord[]) {
+  window.localStorage.setItem(attendanceStorageKey, JSON.stringify(records));
+}
+
+function getProgressReports(): ProgressReport[] {
+  try {
+    const rawReports = window.localStorage.getItem(progressReportsStorageKey);
+    return rawReports ? (JSON.parse(rawReports) as ProgressReport[]) : [];
+  } catch {
+    return [];
+  }
+}
+
+function setProgressReports(reports: ProgressReport[]) {
+  window.localStorage.setItem(progressReportsStorageKey, JSON.stringify(reports));
+}
+
 function ScrollToTop() {
   const { pathname } = useLocation();
 
@@ -493,6 +539,16 @@ function MetaManager() {
         title: 'Employee Dashboard | MSR Civil Solutions',
         description:
           'MSR Civil Solutions employee dashboard preview for attendance, projects, files, and progress reporting.',
+      },
+      '/employee/attendance': {
+        title: 'Employee Attendance | MSR Civil Solutions',
+        description:
+          'Mark attendance and review local attendance history in the MSR Civil Solutions employee portal.',
+      },
+      '/employee/progress': {
+        title: 'Progress Reporting | MSR Civil Solutions',
+        description:
+          'Submit local progress reports with stage, notes, percentage, and photo count in the employee portal.',
       },
       '/customer/login': {
         title: 'Customer Login | MSR Civil Solutions',
@@ -1406,13 +1462,200 @@ function AdminDashboardPage() {
 
 function EmployeeDashboardPage() {
   return (
-    <PortalDashboard
-      eyebrow="Employee dashboard"
-      title="Daily site workflow for field employees"
-      subtitle="Attendance, assigned projects, file access, and progress reporting stay in the same website with employee-only access."
-      metrics={employeeMetrics}
-      modules={employeeModules}
-    />
+    <>
+      <PortalDashboard
+        eyebrow="Employee dashboard"
+        title="Daily site workflow for field employees"
+        subtitle="Attendance, assigned projects, file access, and progress reporting stay in the same website with employee-only access."
+        metrics={employeeMetrics}
+        modules={employeeModules}
+      />
+      <section className="section section-darkest">
+        <div className="container portal-actions">
+          <Link className="btn btn-primary" to="/employee/attendance">
+            Mark attendance <CalendarCheck size={18} />
+          </Link>
+          <Link className="btn btn-secondary" to="/employee/progress">
+            Submit progress report
+          </Link>
+        </div>
+      </section>
+    </>
+  );
+}
+
+function EmployeeAttendancePage() {
+  const today = new Date().toISOString().slice(0, 10);
+  const [records, setRecords] = useState<AttendanceRecord[]>(() => getAttendanceRecords());
+  const hasMarkedToday = records.some((record) => record.date === today);
+
+  function markAttendance() {
+    if (hasMarkedToday) {
+      return;
+    }
+
+    const nextRecords = [
+      {
+        id: `${Date.now()}`,
+        date: today,
+        markedAt: new Date().toISOString(),
+        status: 'Present' as const,
+      },
+      ...records,
+    ];
+    setAttendanceRecords(nextRecords);
+    setRecords(nextRecords);
+  }
+
+  return (
+    <>
+      <PageHero
+        eyebrow="Employee attendance"
+        title="Mark today’s site attendance"
+        subtitle="This prototype stores attendance locally. Production will enforce cutoff time, employee identity, device/IP audit, and admin correction rules."
+      />
+      <section className="section section-dark" id="main-content">
+        <div className="container employee-layout">
+          <article className="quote-summary">
+            <p className="eyebrow">Today</p>
+            <h2>{hasMarkedToday ? 'Present marked' : 'Not marked yet'}</h2>
+            <p>
+              Attendance date: {new Date().toLocaleDateString('en-IN')}. Cutoff and account checks
+              will be enforced during backend integration.
+            </p>
+            <button className="btn btn-primary" type="button" disabled={hasMarkedToday} onClick={markAttendance}>
+              {hasMarkedToday ? 'Attendance marked' : 'Mark attendance'}
+            </button>
+          </article>
+          <article className="employee-panel">
+            <h2>Attendance history</h2>
+            {records.length > 0 ? (
+              <div className="employee-list">
+                {records.map((record) => (
+                  <div key={record.id}>
+                    <span>{new Date(record.markedAt).toLocaleString('en-IN')}</span>
+                    <strong>{record.status}</strong>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="empty-state">No attendance records in this browser yet.</p>
+            )}
+          </article>
+        </div>
+      </section>
+    </>
+  );
+}
+
+function EmployeeProgressPage() {
+  const [projectName, setProjectName] = useState(projects[0].title);
+  const [stage, setStage] = useState('Foundation');
+  const [progressPct, setProgressPct] = useState(25);
+  const [notes, setNotes] = useState('');
+  const [photoCount, setPhotoCount] = useState(0);
+  const [reports, setReports] = useState<ProgressReport[]>(() => getProgressReports());
+
+  function submitReport() {
+    const report: ProgressReport = {
+      id: `${Date.now()}`,
+      projectName,
+      stage,
+      progressPct,
+      notes: notes.trim() || 'No note added.',
+      submittedAt: new Date().toISOString(),
+      photoCount,
+    };
+    const nextReports = [report, ...reports].slice(0, 20);
+    setProgressReports(nextReports);
+    setReports(nextReports);
+    setNotes('');
+    setPhotoCount(0);
+  }
+
+  return (
+    <>
+      <PageHero
+        eyebrow="Progress reporting"
+        title="Submit daily site progress"
+        subtitle="Capture project stage, percentage, notes, and photo count. Production upload storage will use private signed URLs."
+      />
+      <section className="section section-dark" id="main-content">
+        <div className="container employee-layout">
+          <form className="quote-form" onSubmit={(event) => event.preventDefault()}>
+            <label>
+              Project
+              <select value={projectName} onChange={(event) => setProjectName(event.target.value)}>
+                {projects.map((project) => (
+                  <option key={project.slug}>{project.title}</option>
+                ))}
+              </select>
+            </label>
+            <label>
+              Work stage
+              <select value={stage} onChange={(event) => setStage(event.target.value)}>
+                <option>Foundation</option>
+                <option>Column casting</option>
+                <option>Brickwork</option>
+                <option>Waterproofing</option>
+                <option>Finishing</option>
+              </select>
+            </label>
+            <label>
+              Progress percentage: {progressPct}%
+              <input
+                max={100}
+                min={0}
+                step={5}
+                type="range"
+                value={progressPct}
+                onChange={(event) => setProgressPct(Number(event.target.value))}
+              />
+            </label>
+            <label>
+              Photos uploaded count
+              <input
+                max={10}
+                min={0}
+                type="number"
+                value={photoCount}
+                onChange={(event) => setPhotoCount(Number(event.target.value))}
+              />
+            </label>
+            <label className="full-field">
+              Site note
+              <textarea
+                rows={5}
+                value={notes}
+                placeholder="Add stage notes, blockers, material updates, or admin attention needed"
+                onChange={(event) => setNotes(event.target.value)}
+              />
+            </label>
+            <button className="btn btn-primary full-field" type="button" onClick={submitReport}>
+              Save progress report <UploadCloud size={18} />
+            </button>
+          </form>
+          <article className="employee-panel">
+            <h2>Recent reports</h2>
+            {reports.length > 0 ? (
+              <div className="employee-list">
+                {reports.map((report) => (
+                  <div key={report.id}>
+                    <span>
+                      {report.projectName} · {report.stage} · {report.progressPct}%
+                    </span>
+                    <strong>{new Date(report.submittedAt).toLocaleDateString('en-IN')}</strong>
+                    <p>{report.notes}</p>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="empty-state">No progress reports saved in this browser yet.</p>
+            )}
+          </article>
+        </div>
+      </section>
+    </>
   );
 }
 
@@ -1967,6 +2210,8 @@ function AppShell() {
           <Route path="/admin" element={<AdminDashboardPage />} />
           <Route path="/employee/login" element={<EmployeeLoginPage />} />
           <Route path="/employee" element={<EmployeeDashboardPage />} />
+          <Route path="/employee/attendance" element={<EmployeeAttendancePage />} />
+          <Route path="/employee/progress" element={<EmployeeProgressPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </main>

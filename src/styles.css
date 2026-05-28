@@ -755,6 +755,8 @@ a {
 .contact-form input,
 .contact-form select,
 .contact-form textarea,
+.quote-form input,
+.quote-form select,
 .portal-form input {
   background: var(--color-bg-darkest);
   border: 1px solid var(--color-border-light);
@@ -837,23 +839,34 @@ a {
   grid-template-columns: 1fr 0.85fr;
 }
 
+.quote-layout {
+  align-items: start;
+  display: grid;
+  gap: 32px;
+  grid-template-columns: 1fr 0.9fr;
+}
+
 .portal-form,
 .portal-note,
 .portal-metric-card,
-.portal-module-card {
+.portal-module-card,
+.quote-form,
+.quote-summary {
   background: var(--color-bg-mid);
   border: 1px solid var(--color-border);
   border-radius: 4px;
   padding: 24px;
 }
 
-.portal-form {
+.portal-form,
+.quote-form {
   display: grid;
   gap: 18px;
   grid-template-columns: 1fr;
 }
 
-.portal-form label {
+.portal-form label,
+.quote-form label {
   color: var(--color-text-secondary);
   display: grid;
   font-size: 14px;
@@ -925,6 +938,23 @@ a {
 
 .portal-module-card {
   min-height: 220px;
+}
+
+.quote-summary {
+  border-left: 3px solid var(--color-accent-gold);
+}
+
+.quote-summary h2 {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: clamp(34px, 4vw, 52px);
+  line-height: 1.05;
+  margin: 0 0 32px;
+}
+
+.quote-summary p:not(.eyebrow) {
+  color: var(--color-text-secondary);
+  line-height: 1.65;
+  margin: 0 0 24px;
 }
 
 .footer-subhead {
@@ -1192,6 +1222,7 @@ a {
   .split-content,
   .project-detail,
   .contact-layout,
+  .quote-layout,
   .portal-login-layout {
     grid-template-columns: 1fr 1fr;
   }
@@ -1230,6 +1261,7 @@ a {
   .split-content,
   .project-detail,
   .contact-layout,
+  .quote-layout,
   .blog-grid,
   .contact-form,
   .portal-login-layout,

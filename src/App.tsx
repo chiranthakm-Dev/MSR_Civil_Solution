@@ -3,6 +3,7 @@ import {
   Award,
   BriefcaseBusiness,
   Building2,
+  Calculator,
   CalendarCheck,
   CheckCircle2,
   ChevronRight,
@@ -165,6 +166,36 @@ const employeeModules = [
     title: 'Leave Requests',
     description: 'Submit leave requests and track admin approval status.',
     icon: ClipboardCheck,
+  },
+];
+
+const customerMetrics = [
+  { label: 'Saved Quotes', value: '4', icon: FileText },
+  { label: 'Formal Requests', value: '1', icon: ClipboardCheck },
+  { label: 'Estimated Range', value: 'Ready', icon: Calculator },
+  { label: 'Site Visits', value: '0', icon: CalendarCheck },
+];
+
+const customerModules = [
+  {
+    title: 'Estimate Calculator',
+    description: 'Generate a preliminary construction cost range using site, floor, usage, and finish inputs.',
+    icon: Calculator,
+  },
+  {
+    title: 'My Quotes',
+    description: 'Review previously generated quotes and track formal quotation request status.',
+    icon: FileText,
+  },
+  {
+    title: 'Request Formal Quote',
+    description: 'Send calculator inputs to MSR for review, site inspection, and proposal preparation.',
+    icon: ClipboardCheck,
+  },
+  {
+    title: 'Profile',
+    description: 'Manage customer contact details before requesting quotes or project updates.',
+    icon: Users,
   },
 ];
 
@@ -430,6 +461,21 @@ function MetaManager() {
         description:
           'MSR Civil Solutions employee dashboard preview for attendance, projects, files, and progress reporting.',
       },
+      '/customer/login': {
+        title: 'Customer Login | MSR Civil Solutions',
+        description:
+          'Customer login for MSR Civil Solutions quote calculator access, saved quotes, and formal quotation requests.',
+      },
+      '/customer': {
+        title: 'Customer Dashboard | MSR Civil Solutions',
+        description:
+          'MSR Civil Solutions customer dashboard preview for quotes, formal requests, and project communication.',
+      },
+      '/customer/quote': {
+        title: 'Construction Estimate Calculator | MSR Civil Solutions',
+        description:
+          'Generate a preliminary residential or commercial construction estimate with MSR Civil Solutions.',
+      },
     };
 
     const meta = project
@@ -461,6 +507,7 @@ function MetaManager() {
       'name',
       'robots',
       pathname.startsWith('/admin') || pathname.startsWith('/employee')
+        || pathname.startsWith('/customer')
         ? 'noindex,nofollow'
         : 'index,follow',
     );
@@ -1187,7 +1234,7 @@ function PortalLoginPage({
   codeLabel,
   dashboardPath,
 }: {
-  type: 'Admin' | 'Employee';
+  type: 'Admin' | 'Employee' | 'Customer';
   title: string;
   subtitle: string;
   codeLabel: string;
@@ -1201,7 +1248,16 @@ function PortalLoginPage({
           <form className="portal-form">
             <label>
               {codeLabel}
-              <input autoComplete="username" placeholder={type === 'Admin' ? 'admin@msr' : 'EMP-001'} />
+              <input
+                autoComplete="username"
+                placeholder={
+                  type === 'Admin'
+                    ? 'admin@msr'
+                    : type === 'Employee'
+                      ? 'EMP-001'
+                      : 'you@example.com'
+                }
+              />
             </label>
             <label>
               Password
@@ -1322,6 +1378,140 @@ function EmployeeDashboardPage() {
   );
 }
 
+function CustomerLoginPage() {
+  return (
+    <PortalLoginPage
+      type="Customer"
+      title="Customer access for quotes and project communication"
+      subtitle="Customers can generate preliminary estimates, save quotes, and request a formal quotation from MSR."
+      codeLabel="Customer email"
+      dashboardPath="/customer"
+    />
+  );
+}
+
+function CustomerDashboardPage() {
+  return (
+    <>
+      <PortalDashboard
+        eyebrow="Customer dashboard"
+        title="Quote tools and project communication in one place"
+        subtitle="This customer portal preview covers the calculator, saved quotes, formal quote requests, and profile details."
+        metrics={customerMetrics}
+        modules={customerModules}
+      />
+      <section className="section section-darkest">
+        <div className="container">
+          <Link className="btn btn-primary" to="/customer/quote">
+            Open estimate calculator <Calculator size={18} />
+          </Link>
+        </div>
+      </section>
+    </>
+  );
+}
+
+function CustomerQuotePage() {
+  const [area, setArea] = useState(1200);
+  const [floors, setFloors] = useState(1);
+  const [finish, setFinish] = useState<'Economy' | 'Standard' | 'Premium' | 'Luxury'>('Standard');
+  const [usage, setUsage] = useState<'Residential' | 'Commercial' | 'Industrial'>('Residential');
+
+  const baseRates = {
+    Economy: 1700,
+    Standard: 2200,
+    Premium: 3100,
+    Luxury: 4200,
+  };
+  const usageMultiplier = {
+    Residential: 1,
+    Commercial: 1.12,
+    Industrial: 1.2,
+  };
+  const builtUpArea = area * floors;
+  const estimate = builtUpArea * baseRates[finish] * usageMultiplier[usage];
+  const lowEstimate = estimate * 0.92;
+  const highEstimate = estimate * 1.12;
+  const currency = new Intl.NumberFormat('en-IN', {
+    currency: 'INR',
+    maximumFractionDigits: 0,
+    style: 'currency',
+  });
+
+  return (
+    <>
+      <PageHero
+        eyebrow="Customer calculator"
+        title="Generate a preliminary construction estimate"
+        subtitle="This first calculator uses static sample rates. In production, all rates will come from the admin-managed rate table."
+      />
+      <section className="section section-dark" id="main-content">
+        <div className="container quote-layout">
+          <form className="quote-form">
+            <label>
+              Site / built-up area per floor
+              <input
+                min={100}
+                step={50}
+                type="number"
+                value={area}
+                onChange={(event) => setArea(Number(event.target.value))}
+              />
+            </label>
+            <label>
+              Number of floors
+              <input
+                min={1}
+                max={6}
+                type="number"
+                value={floors}
+                onChange={(event) => setFloors(Number(event.target.value))}
+              />
+            </label>
+            <label>
+              Usage type
+              <select value={usage} onChange={(event) => setUsage(event.target.value as typeof usage)}>
+                <option>Residential</option>
+                <option>Commercial</option>
+                <option>Industrial</option>
+              </select>
+            </label>
+            <label>
+              Finishing grade
+              <select value={finish} onChange={(event) => setFinish(event.target.value as typeof finish)}>
+                <option>Economy</option>
+                <option>Standard</option>
+                <option>Premium</option>
+                <option>Luxury</option>
+              </select>
+            </label>
+          </form>
+          <aside className="quote-summary">
+            <p className="eyebrow">Preliminary range</p>
+            <h2>
+              {currency.format(lowEstimate)} - {currency.format(highEstimate)}
+            </h2>
+            <div className="metric-grid">
+              <span>{builtUpArea.toLocaleString('en-IN')} sq.ft.</span>
+              <span>{currency.format(baseRates[finish])} / sq.ft.</span>
+              <span>{finish} finish</span>
+              <span>{usage} use</span>
+            </div>
+            <p>
+              This is a planning estimate only. Final quotation is subject to
+              site inspection, drawings, soil condition, inclusions, and current
+              material rates.
+            </p>
+            <Link className="btn btn-primary" to="/contact">
+              Request formal quotation <ArrowRight size={18} />
+            </Link>
+          </aside>
+        </div>
+      </section>
+    </>
+  );
+}
+
 function NotFoundPage() {
   return (
     <>
@@ -1387,6 +1577,7 @@ function Footer() {
             </Link>
           ))}
           <h2 className="footer-subhead">Portals</h2>
+          <Link to="/customer/login">Customer Login</Link>
           <Link to="/employee/login">Employee Login</Link>
           <Link to="/admin/login">Admin Login</Link>
         </div>
@@ -1432,6 +1623,9 @@ function AppShell() {
           <Route path="/blog" element={<BlogPage />} />
           <Route path="/blog/:slug" element={<BlogDetailPage />} />
           <Route path="/contact" element={<ContactPage />} />
+          <Route path="/customer/login" element={<CustomerLoginPage />} />
+          <Route path="/customer" element={<CustomerDashboardPage />} />
+          <Route path="/customer/quote" element={<CustomerQuotePage />} />
           <Route path="/admin/login" element={<AdminLoginPage />} />
           <Route path="/admin" element={<AdminDashboardPage />} />
           <Route path="/employee/login" element={<EmployeeLoginPage />} />

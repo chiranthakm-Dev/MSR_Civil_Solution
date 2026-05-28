@@ -273,7 +273,7 @@ Future phases can extend the same codebase into the quote calculator, customer p
 ### Customer Authentication
 
 - [ ] Customer registration
-- [ ] Customer login
+- [x] Customer login
 - [ ] Email verification or OTP
 - [ ] Forgot password flow
 - [ ] Customer profile page
@@ -281,23 +281,23 @@ Future phases can extend the same codebase into the quote calculator, customer p
 
 ### Calculator Inputs
 
-- [ ] Plot/site area
+- [x] Plot/site area
 - [ ] Unit toggle: sq.ft. / sq.m.
 - [ ] Plot shape
 - [ ] Location/zone
 - [ ] Soil type
 - [ ] Site accessibility
-- [ ] Number of floors
-- [ ] Built-up area per floor
+- [x] Number of floors
+- [x] Built-up area per floor
 - [ ] Custom area per floor option
 - [ ] Basement option and basement area
 - [ ] Staircase type
 - [ ] Construction type
 - [ ] Foundation type
 - [ ] Auto-suggest foundation based on soil type
-- [ ] Usage type
+- [x] Usage type
 - [ ] Usage sub-type
-- [ ] Finishing grade
+- [x] Finishing grade
 - [ ] Electrical inclusion
 - [ ] Plumbing and sanitation inclusion
 - [ ] Windows and doors inclusion
@@ -313,8 +313,8 @@ Future phases can extend the same codebase into the quote calculator, customer p
 
 ### Calculator Outputs
 
-- [ ] Estimated construction cost range
-- [ ] Cost per sq.ft.
+- [x] Estimated construction cost range
+- [x] Cost per sq.ft.
 - [ ] Foundation and substructure breakdown
 - [ ] RCC/structure work breakdown
 - [ ] Brickwork and masonry breakdown
@@ -327,8 +327,8 @@ Future phases can extend the same codebase into the quote calculator, customer p
 - [ ] Miscellaneous and contingency breakdown
 - [ ] Estimated timeline by phase
 - [ ] Material quantity estimates
-- [ ] Disclaimer
-- [ ] Request Formal Quotation CTA
+- [x] Disclaimer
+- [x] Request Formal Quotation CTA
 
 ### Quote Storage
 
@@ -346,10 +346,10 @@ Future phases can extend the same codebase into the quote calculator, customer p
 - [ ] Rates loaded from database
 - [ ] No hardcoded production rates
 - [ ] Calculation utility tests
-- [ ] Min/max range logic
+- [x] Min/max range logic
 - [ ] Timeline formula
 - [ ] Material estimate formula
-- [ ] Clear warnings for approximate estimates
+- [x] Clear warnings for approximate estimates
 
 ---
 

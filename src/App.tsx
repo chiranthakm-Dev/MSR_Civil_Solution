@@ -407,8 +407,40 @@ type ProgressReport = {
   photoCount: number;
 };
 
+type RateRow = {
+  id: string;
+  group: 'Base rate' | 'Zone multiplier' | 'Soil multiplier' | 'Accessibility multiplier' | 'Inclusion cost' | 'Timeline';
+  label: string;
+  value: number;
+  suffix: string;
+};
+
+type RateHistoryEntry = {
+  id: string;
+  changedAt: string;
+  summary: string;
+};
+
 const attendanceStorageKey = 'msr.employeeAttendance';
 const progressReportsStorageKey = 'msr.progressReports';
+const adminRatesStorageKey = 'msr.adminRates';
+const adminRateHistoryStorageKey = 'msr.adminRateHistory';
+
+const defaultRateRows: RateRow[] = [
+  { id: 'base-economy', group: 'Base rate', label: 'Economy finish', value: 1700, suffix: 'INR / sq.ft.' },
+  { id: 'base-standard', group: 'Base rate', label: 'Standard finish', value: 2200, suffix: 'INR / sq.ft.' },
+  { id: 'base-premium', group: 'Base rate', label: 'Premium finish', value: 3100, suffix: 'INR / sq.ft.' },
+  { id: 'base-luxury', group: 'Base rate', label: 'Luxury finish', value: 4200, suffix: 'INR / sq.ft.' },
+  { id: 'zone-urban', group: 'Zone multiplier', label: 'Urban', value: 1.08, suffix: 'x' },
+  { id: 'zone-semi-urban', group: 'Zone multiplier', label: 'Semi-urban', value: 1, suffix: 'x' },
+  { id: 'zone-rural', group: 'Zone multiplier', label: 'Rural', value: 0.96, suffix: 'x' },
+  { id: 'soil-hard-rock', group: 'Soil multiplier', label: 'Hard rock', value: 1.12, suffix: 'x' },
+  { id: 'soil-black-cotton', group: 'Soil multiplier', label: 'Black cotton', value: 1.15, suffix: 'x' },
+  { id: 'access-narrow-lane', group: 'Accessibility multiplier', label: 'Narrow lane', value: 1.06, suffix: 'x' },
+  { id: 'include-electrical', group: 'Inclusion cost', label: 'Electrical', value: 160, suffix: 'INR / sq.ft.' },
+  { id: 'include-plumbing', group: 'Inclusion cost', label: 'Plumbing', value: 145, suffix: 'INR / sq.ft.' },
+  { id: 'timeline-floor', group: 'Timeline', label: 'Base weeks per floor', value: 10, suffix: 'weeks' },
+];
 
 function getAttendanceRecords(): AttendanceRecord[] {
   try {
@@ -434,6 +466,32 @@ function getProgressReports(): ProgressReport[] {
 
 function setProgressReports(reports: ProgressReport[]) {
   window.localStorage.setItem(progressReportsStorageKey, JSON.stringify(reports));
+}
+
+function getAdminRates(): RateRow[] {
+  try {
+    const rawRates = window.localStorage.getItem(adminRatesStorageKey);
+    return rawRates ? (JSON.parse(rawRates) as RateRow[]) : defaultRateRows;
+  } catch {
+    return defaultRateRows;
+  }
+}
+
+function setAdminRates(rates: RateRow[]) {
+  window.localStorage.setItem(adminRatesStorageKey, JSON.stringify(rates));
+}
+
+function getAdminRateHistory(): RateHistoryEntry[] {
+  try {
+    const rawHistory = window.localStorage.getItem(adminRateHistoryStorageKey);
+    return rawHistory ? (JSON.parse(rawHistory) as RateHistoryEntry[]) : [];
+  } catch {
+    return [];
+  }
+}
+
+function setAdminRateHistory(history: RateHistoryEntry[]) {
+  window.localStorage.setItem(adminRateHistoryStorageKey, JSON.stringify(history));
 }
 
 function ScrollToTop() {
@@ -529,6 +587,11 @@ function MetaManager() {
         title: 'Admin Dashboard | MSR Civil Solutions',
         description:
           'MSR Civil Solutions admin dashboard preview for projects, rates, employees, quotes, and content management.',
+      },
+      '/admin/rates': {
+        title: 'Rate Management | MSR Civil Solutions Admin',
+        description:
+          'Admin rate management preview for base rates, multipliers, inclusions, timelines, and rate history.',
       },
       '/employee/login': {
         title: 'Employee Login | MSR Civil Solutions',
@@ -1450,13 +1513,130 @@ function EmployeeLoginPage() {
 
 function AdminDashboardPage() {
   return (
-    <PortalDashboard
-      eyebrow="Admin dashboard"
-      title="Control panel for projects, rates, people, and content"
-      subtitle="This dashboard preview maps the PRD modules into one management surface. Auth, database writes, and audit logs come next."
-      metrics={adminMetrics}
-      modules={adminModules}
-    />
+    <>
+      <PortalDashboard
+        eyebrow="Admin dashboard"
+        title="Control panel for projects, rates, people, and content"
+        subtitle="This dashboard preview maps the PRD modules into one management surface. Auth, database writes, and audit logs come next."
+        metrics={adminMetrics}
+        modules={adminModules}
+      />
+      <section className="section section-darkest">
+        <div className="container portal-actions">
+          <Link className="btn btn-primary" to="/admin/rates">
+            Manage rates <IndianRupee size={18} />
+          </Link>
+          <Link className="btn btn-secondary" to="/customer/quote">
+            Test customer calculator
+          </Link>
+        </div>
+      </section>
+    </>
+  );
+}
+
+function AdminRateManagementPage() {
+  const [rates, setRates] = useState<RateRow[]>(() => getAdminRates());
+  const [history, setHistory] = useState<RateHistoryEntry[]>(() => getAdminRateHistory());
+  const [saveMessage, setSaveMessage] = useState('');
+  const [testArea, setTestArea] = useState(1200);
+  const standardRate = rates.find((rate) => rate.id === 'base-standard')?.value ?? 2200;
+  const urbanMultiplier = rates.find((rate) => rate.id === 'zone-urban')?.value ?? 1.08;
+  const testEstimate = testArea * standardRate * urbanMultiplier;
+  const currency = new Intl.NumberFormat('en-IN', {
+    currency: 'INR',
+    maximumFractionDigits: 0,
+    style: 'currency',
+  });
+
+  function updateRate(id: string, value: number) {
+    setRates((current) =>
+      current.map((rate) => (rate.id === id ? { ...rate, value } : rate)),
+    );
+  }
+
+  function saveRates() {
+    const entry: RateHistoryEntry = {
+      id: `${Date.now()}`,
+      changedAt: new Date().toISOString(),
+      summary: `${rates.length} rate parameters saved locally`,
+    };
+    const nextHistory = [entry, ...history].slice(0, 12);
+    setAdminRates(rates);
+    setAdminRateHistory(nextHistory);
+    setHistory(nextHistory);
+    setSaveMessage('Rates saved locally. Supabase audit logging comes in the backend phase.');
+  }
+
+  return (
+    <>
+      <PageHero
+        eyebrow="Admin rates"
+        title="Manage calculator rates and multipliers"
+        subtitle="Edit rate parameters, save a local version history, and test a sample calculator result before database integration."
+      />
+      <section className="section section-dark" id="main-content">
+        <div className="container admin-rate-layout">
+          <div className="admin-rate-table">
+            {rates.map((rate) => (
+              <label key={rate.id}>
+                <span>
+                  <strong>{rate.label}</strong>
+                  <small>{rate.group}</small>
+                </span>
+                <input
+                  min={0}
+                  step={rate.suffix === 'x' ? 0.01 : 10}
+                  type="number"
+                  value={rate.value}
+                  onChange={(event) => updateRate(rate.id, Number(event.target.value))}
+                />
+                <em>{rate.suffix}</em>
+              </label>
+            ))}
+            <button className="btn btn-primary" type="button" onClick={saveRates}>
+              Save rate changes
+            </button>
+            {saveMessage ? <p className="form-success">{saveMessage}</p> : null}
+          </div>
+          <aside className="employee-panel">
+            <h2>Test calculator</h2>
+            <label className="admin-test-input">
+              Sample area
+              <input
+                min={100}
+                step={50}
+                type="number"
+                value={testArea}
+                onChange={(event) => setTestArea(Number(event.target.value))}
+              />
+            </label>
+            <div className="portal-metric-card">
+              <span>
+                <Calculator size={22} />
+              </span>
+              <div>
+                <p>Standard urban estimate</p>
+                <strong>{currency.format(testEstimate)}</strong>
+              </div>
+            </div>
+            <h2>Version history</h2>
+            {history.length > 0 ? (
+              <div className="employee-list">
+                {history.map((entry) => (
+                  <div key={entry.id}>
+                    <span>{new Date(entry.changedAt).toLocaleString('en-IN')}</span>
+                    <strong>{entry.summary}</strong>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="empty-state">No local rate changes saved yet.</p>
+            )}
+          </aside>
+        </div>
+      </section>
+    </>
   );
 }
 
@@ -2208,6 +2388,7 @@ function AppShell() {
           <Route path="/customer/quotes/:id" element={<CustomerQuoteDetailPage />} />
           <Route path="/admin/login" element={<AdminLoginPage />} />
           <Route path="/admin" element={<AdminDashboardPage />} />
+          <Route path="/admin/rates" element={<AdminRateManagementPage />} />
           <Route path="/employee/login" element={<EmployeeLoginPage />} />
           <Route path="/employee" element={<EmployeeDashboardPage />} />
           <Route path="/employee/attendance" element={<EmployeeAttendancePage />} />

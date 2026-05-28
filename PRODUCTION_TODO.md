@@ -374,16 +374,16 @@ Future phases can extend the same codebase into the quote calculator, customer p
 
 ### Rate Management
 
-- [ ] Base rate table by finishing grade and usage type
-- [ ] Zone multiplier table
-- [ ] Soil multiplier table
-- [ ] Accessibility multiplier table
-- [ ] Inclusion cost table
-- [ ] Timeline base weeks table
-- [ ] Inline editing
-- [ ] Save confirmation
-- [ ] Rate version history
-- [ ] Test calculator tool
+- [x] Base rate table by finishing grade and usage type
+- [x] Zone multiplier table
+- [x] Soil multiplier table
+- [x] Accessibility multiplier table
+- [x] Inclusion cost table
+- [x] Timeline base weeks table
+- [x] Inline editing
+- [x] Save confirmation
+- [x] Rate version history
+- [x] Test calculator tool
 - [ ] Audit log for all rate changes
 
 ### Quote And Enquiry Management

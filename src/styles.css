@@ -1076,6 +1076,69 @@ a {
   grid-template-columns: 0.9fr 1.1fr;
 }
 
+.admin-rate-layout {
+  align-items: start;
+  display: grid;
+  gap: 32px;
+  grid-template-columns: 1.25fr 0.75fr;
+}
+
+.admin-rate-table {
+  background: var(--color-bg-mid);
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  display: grid;
+  gap: 10px;
+  padding: 24px;
+}
+
+.admin-rate-table label {
+  align-items: center;
+  background: var(--color-bg-darkest);
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  display: grid;
+  gap: 14px;
+  grid-template-columns: 1fr 140px 100px;
+  padding: 14px 16px;
+}
+
+.admin-rate-table strong,
+.admin-rate-table small {
+  display: block;
+}
+
+.admin-rate-table strong {
+  color: var(--color-text-primary);
+}
+
+.admin-rate-table small,
+.admin-rate-table em {
+  color: var(--color-text-muted);
+  font-size: 12px;
+  font-style: normal;
+}
+
+.admin-rate-table input,
+.admin-test-input input {
+  background: var(--color-bg-mid);
+  border: 1px solid var(--color-border-light);
+  border-radius: 4px;
+  color: var(--color-text-primary);
+  min-height: 42px;
+  padding: 10px 12px;
+  width: 100%;
+}
+
+.admin-test-input {
+  color: var(--color-text-secondary);
+  display: grid;
+  font-size: 14px;
+  font-weight: 700;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+
 .employee-panel {
   background: var(--color-bg-mid);
   border: 1px solid var(--color-border);
@@ -1411,6 +1474,7 @@ a {
   .quote-layout,
   .quote-detail-layout,
   .employee-layout,
+  .admin-rate-layout,
   .portal-login-layout {
     grid-template-columns: 1fr 1fr;
   }
@@ -1452,6 +1516,7 @@ a {
   .quote-layout,
   .quote-detail-layout,
   .employee-layout,
+  .admin-rate-layout,
   .blog-grid,
   .saved-quote-grid,
   .contact-form,
@@ -1476,5 +1541,9 @@ a {
   .floating-whatsapp {
     bottom: 14px;
     right: 14px;
+  }
+
+  .admin-rate-table label {
+    grid-template-columns: 1fr;
   }
 }
